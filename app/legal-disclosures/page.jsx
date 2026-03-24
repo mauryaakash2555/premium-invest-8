@@ -49,6 +49,8 @@ export default function LegalDisclosures() {
             </h2>
             <p className="text-gray-300">
               BM Wealth is a premier wealth distribution firm based in Mumbai. We operate in strict accordance with the regulatory frameworks established by the Association of Mutual Funds in India (AMFI) and the Insurance Regulatory and Development Authority of India (IRDAI).
+              These registrations authorise us to distribute mutual fund schemes and insurance products on behalf of regulated manufacturers (AMCs and insurers).
+              We are not a SEBI-registered Investment Advisor (RIA) or Portfolio Manager and do not provide personalised investment advice or discretionary portfolio management services.
             </p>
             <ul className="list-none p-0 space-y-4 text-gray-400">
               <li className="flex items-start gap-3">
@@ -80,6 +82,8 @@ export default function LegalDisclosures() {
             </h2>
             <p className="text-gray-300">
               Investment products are subject to market dynamics. Performance data, where provided, represents historical outcomes and is not a guarantee of future results.
+              Returns on equity, debt, and hybrid instruments can fluctuate based on macroeconomic conditions, interest rate cycles, regulatory changes, and global events.
+              Investors should consider their risk tolerance, investment horizon, and financial goals before committing capital to any product.
             </p>
             <div className="bg-[var(--lux-accent)]/5 border-l-4 border-[var(--lux-accent)] p-6 rounded-r-lg italic text-gray-400">
               "Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully before committing capital. BM Wealth serves as a facilitator and distributor, providing access to premier investment vehicles."
@@ -91,7 +95,8 @@ export default function LegalDisclosures() {
               Confidentiality & Integrity
             </h2>
             <p className="text-gray-300">
-              The security of our clients' financial data is of paramount importance. We maintain the highest standards of data protection and professional integrity in all our interactions.
+              The security of our clients&apos; financial data is of paramount importance. We maintain the highest standards of data protection and professional integrity in all our interactions.
+              Personal and financial information shared with BM Wealth is used solely for the purpose of facilitating product distribution and is never sold or shared with third parties beyond what is required by applicable regulations.
             </p>
           </section>
         </div>

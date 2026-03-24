@@ -184,6 +184,22 @@ export default function ExecutionPartnersPage() {
           >
             Apply directly on official partner platforms.
           </p>
+          <p
+            style={{
+              fontSize: 'clamp(14px, 1.8vw, 17px)',
+              color: 'rgba(255, 255, 255, 0.65)',
+              maxWidth: '700px',
+              margin: '22px auto 0',
+              lineHeight: 1.8,
+            }}
+          >
+            BM Wealth is an AMFI-registered mutual fund distributor and IRDAI-licensed insurance corporate agent based in Mumbai.
+            As part of our commitment to transparent wealth management, we provide direct access to banking and lending partners
+            whose products complement your financial plan. Each partner listed below is an RBI-regulated institution.
+            You apply on their official platform — BM Wealth does not process applications, hold funds, or make credit decisions.
+            We may receive a referral fee at no additional cost to you; this does not influence which partners appear here.
+            Always review terms, interest rates, fees, and eligibility criteria on the partner&apos;s website before applying.
+          </p>
         </div>
       </section>
 

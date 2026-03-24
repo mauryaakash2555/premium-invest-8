@@ -2505,10 +2505,10 @@ const calculations = {
       note:
         pt === 'term' 
           ? 'Term insurance provides pure protection with no maturity benefit. Best for income replacement.'
-          : `LIC ${pt} provides guaranteed returns with life cover. IRR is typically 4-6%. Consider separating insurance and investment for better returns.`,
+          : `LIC ${pt} provides fixed/assured returns with life cover. IRR is typically 4-6%. Consider separating insurance and investment for better returns.`,
       recommendation: irr * 100 < 6 
         ? '💡 Consider: Term Insurance + Mutual Fund SIP may give better overall returns'
-        : 'This policy has reasonable IRR. Continue if you value guaranteed returns.',
+        : 'This policy has reasonable IRR. Continue if you value fixed/assured returns.',
     };
   },
 

@@ -295,6 +295,34 @@ export const staticBlogPost13 = {
     </div>
   </a>
 
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who Should Consider Scapia — And Who Should Skip It
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Consider Scapia if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Travel domestically or internationally 2-4 times per year and want travel-focused rewards</li>
+        <li>Prefer zero annual fees and a straightforward points-to-flights redemption model</li>
+        <li>Are comfortable with a digital-first card where most interactions happen through the app</li>
+        <li>Have a monthly spend of ₹20,000-₹80,000 and want to maximise flight redemptions</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Skip Scapia if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You need airport lounge access or luxury concierge services that premium cards include</li>
+        <li>Your spending is primarily on fuel, utilities, or rent payments where reward rates may differ</li>
+        <li>You prefer an established banking relationship with a physical branch network for dispute resolution</li>
+      </ul>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 10px;">
@@ -571,6 +599,34 @@ export const staticBlogPost14 = {
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">A detailed comparison of Axis Flipkart, Ace, Magnus, and My Zone for different professional profiles.</p>
     </div>
   </a>
+
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who Should Consider SBI Elite — And Who Should Look Elsewhere
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        SBI Elite fits if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Already bank with SBI and want a premium card with lounge access and higher reward rates</li>
+        <li>Spend ₹50,000+ monthly across categories where SBI offers bonus points</li>
+        <li>Value the security and wide acceptance of SBI network across India and abroad</li>
+        <li>Travel frequently and benefit from complimentary domestic and international lounge visits</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Look elsewhere if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Your monthly spend is below ₹25,000 — the annual fee may not justify the rewards earned</li>
+        <li>You want best-in-class digital experience or instant customer support via app chat</li>
+        <li>You prioritise cashback over reward points for simpler value calculation</li>
+      </ul>
+    </div>
+  </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -1067,6 +1123,24 @@ export const staticBlogPost16 = {
     </div>
   </a>
 
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      How to Choose the Right Travel Card for Your Spend Pattern
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      No single travel card is universally best. Your ideal choice depends on your travel frequency, average ticket size, and whether you prioritise lounge access, forex markup, or airline miles. Consider these decision factors before applying:
+    </p>
+    <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px; margin-bottom: 22px;">
+      <li><strong style="color: var(--lux-accent);">1-2 domestic trips/year:</strong> A no-annual-fee card with basic lounge access typically offers the best value-to-cost ratio</li>
+      <li><strong style="color: var(--lux-accent);">3-5 international trips/year:</strong> Look for low forex markup (under 2%), global lounge networks, and travel insurance bundled in</li>
+      <li><strong style="color: var(--lux-accent);">Frequent flyer (10+ trips/year):</strong> Airline co-branded cards or premium cards with uncapped lounge visits and priority boarding become worthwhile despite higher annual fees</li>
+    </ul>
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      Card benefits, fees, and reward structures change periodically. Always verify current terms on the issuer website before applying.
+    </p>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 10px;">
@@ -1284,6 +1358,27 @@ export const staticBlogPost17 = {
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">A structured framework for professionals managing short-term liquidity gaps.</p>
     </div>
   </a>
+
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Sample Honeymoon Budget Scenario — Domestic vs International
+    </h2>
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Domestic (Goa/Udaipur, 5 nights):</strong> Flights ₹12,000-18,000 couple + Hotel ₹3,000-8,000/night + Activities ₹10,000-15,000 = Total ₹40,000-₹75,000
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">International (Bali/Thailand, 7 nights):</strong> Flights ₹30,000-55,000 couple + Hotel ₹4,000-12,000/night + Activities ₹20,000-35,000 = Total ₹80,000-₹1,75,000
+      </p>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Potential card savings:</strong> Using a travel credit card with 2-5% effective reward rate on travel bookings, a ₹1,00,000 honeymoon spend can yield ₹2,000-₹5,000 in points/cashback — enough for a return domestic flight or a hotel night upgrade.
+      </p>
+    </div>
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      Prices are illustrative, based on mid-range bookings in 2025-26. Deals, seasons, and card promotions affect actual savings significantly.
+    </p>
+  </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -1526,6 +1621,29 @@ export const staticBlogPost18 = {
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">An honest review of the most advanced order flow trading platform available.</p>
     </div>
   </a>
+
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Rupee Cost Comparison — ₹3 Lakh Borrowing Scenario
+    </h2>
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Scenario:</strong> You need ₹3,00,000 for 12 months. Two options:
+      </p>
+      <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <li><strong style="color: var(--lux-accent);">Personal loan at 12% p.a.:</strong> EMI ≈ ₹26,700/month → Total repayment ≈ ₹3,20,400 → Interest cost ≈ ₹20,400</li>
+        <li><strong style="color: var(--lux-accent);">Credit card EMI at 18% p.a.:</strong> EMI ≈ ₹27,500/month → Total repayment ≈ ₹3,30,000 → Interest cost ≈ ₹30,000</li>
+        <li>Difference: ₹9,600 more for the credit card route on a ₹3 lakh, 12-month borrowing</li>
+      </ul>
+      <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+        Rates and processing fees vary by lender and credit score. This is a simplified comparison — always request the exact APR from your bank before deciding.
+      </p>
+    </div>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
+      The credit card EMI route may still make sense when the convenience of instant conversion on an existing card outweighs the incremental interest cost — but only if you are certain you can clear the EMI tenure without default or prepayment penalties.
+    </p>
+  </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -2012,6 +2130,34 @@ export const staticBlogPost20 = {
     </div>
   </a>
 
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who Should Consider Pepperstone — And Who Should Not
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Pepperstone may suit you if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You trade forex or CFDs actively and need tight spreads with fast execution</li>
+        <li>You value regulatory compliance — Pepperstone holds licenses from ASIC, FCA, and CySEC</li>
+        <li>You prefer MetaTrader 4/5 or cTrader platforms with advanced charting and automation</li>
+        <li>You need access to global indices, commodities, and currency pairs beyond what domestic brokers offer</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Pepperstone is probably not right if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You primarily trade Indian equities, F&O, or mutual funds — use a SEBI-registered domestic broker instead</li>
+        <li>You are a complete beginner and have not traded on any platform before — understand the risks of leveraged products first</li>
+        <li>You need INR-denominated accounts and direct UPI funding — international brokers have different funding pathways</li>
+      </ul>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 10px;">
@@ -2336,6 +2482,26 @@ export const staticBlogPost21 = {
     </div>
   </a>
 
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Budget Planning for Corporate Wellness Gifting
+    </h2>
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Per-head budget guidance (illustrative, 2025-26):</strong>
+      </p>
+      <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <li><strong style="color: var(--lux-accent);">Under ₹500/person:</strong> Single Ayurvedic product — immunity booster, herbal tea set, or branded hand cream</li>
+        <li><strong style="color: var(--lux-accent);">₹500-₹1,500/person:</strong> Curated wellness hamper — 3-4 items (oils, supplements, skincare) in premium packaging</li>
+        <li><strong style="color: var(--lux-accent);">₹1,500-₹5,000/person:</strong> Luxury wellness box — spa-grade products, organic foods, personalised branding, and delivery</li>
+      </ul>
+      <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+        Prices are indicative and vary by brand, order volume, and customisation. Bulk orders (50+ units) typically attract 10-20% discounts.
+      </p>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 10px;">
@@ -2558,6 +2724,33 @@ export const staticBlogPost22 = {
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">A developer's perspective on hosting performance for Indian financial websites.</p>
     </div>
   </a>
+
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Is Switcher Studio Worth It? — Who Benefits Most
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Switcher Studio is a strong fit if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Run regular live streams (webinars, market commentary, client sessions) and need multi-camera switching from iOS devices</li>
+        <li>Want to add lower-thirds, overlays, and branded graphics to live video without complex OBS setups</li>
+        <li>Are a financial content creator looking for professional production quality without a dedicated studio team</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Look at alternatives if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You primarily stream from a desktop — OBS Studio (free) or StreamYard may be more suitable</li>
+        <li>You only need simple single-camera recording — Switcher Studio's multi-camera capabilities would be underutilised</li>
+        <li>You are on Android — Switcher Studio is iOS-only as of 2026</li>
+      </ul>
+    </div>
+  </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -2799,6 +2992,29 @@ export const staticBlogPost23 = {
       <p style="font-size: 16px; color: #CCCCCC; font-style: italic;">An honest review of OPPO's latest flagship for professionals who value productivity.</p>
     </div>
   </a>
+
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Real-World Hosting Cost Scenario for Indian Finance Blogs
+    </h2>
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Scenario:</strong> A finance blog publishing 4-8 posts per month, receiving 30,000-80,000 monthly visitors, hosted on WordPress with 2-3 plugins and a CDN.
+      </p>
+      <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <li><strong style="color: var(--lux-accent);">Hostinger Business:</strong> ₹249-₹349/month (promotional) → includes free domain, SSL, and 200 GB storage — sufficient for most starting blogs</li>
+        <li><strong style="color: var(--lux-accent);">DigitalOcean Droplet:</strong> $6-$12/month (~₹500-₹1,000) → self-managed Linux server, full control, requires technical setup</li>
+        <li><strong style="color: var(--lux-accent);">Cloudways (on DigitalOcean):</strong> $14-$28/month (~₹1,200-₹2,400) → managed hosting with automatic backups, staging, and server monitoring</li>
+      </ul>
+      <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+        Pricing is illustrative as of early 2026. Hosting costs change frequently — always verify current plans on the provider website.
+      </p>
+    </div>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
+      For most Indian finance bloggers starting out, Hostinger offers the best cost-to-ease ratio. As traffic grows past 50,000-80,000 monthly visits, migrating to Cloudways or a managed VPS improves performance and allows scaling without shared-hosting throttling.
+    </p>
+  </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 

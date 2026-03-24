@@ -1109,6 +1109,34 @@ export const staticBlogPost2 = {
     </div>
   </div>
 
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Analysis Is For — And Who Should Consider Alternatives
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This case study is most relevant if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Are within 10-15 years of your target retirement date</li>
+        <li>Have a retirement corpus that feels "large" but hasn't been stress-tested against actual living costs</li>
+        <li>Live in a metro city where expenses routinely exceed inflation benchmarks</li>
+        <li>Have not reviewed your withdrawal rate assumptions in the last 3 years</li>
+      </ul>
+    </div>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        You may want a different starting point if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Retirement is 20+ years away and you are still accumulating — focus on systematic investing first</li>
+        <li>You plan to relocate to a Tier-2 city where monthly expenses may be 40-50% lower</li>
+        <li>You have substantial rental income or pension that independently covers 70%+ of expenses</li>
+      </ul>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 40px;">
@@ -1596,6 +1624,49 @@ export const staticBlogPost3 = {
     </div>
   </div>
 
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Is For — And Who Should Approach Differently
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This analysis is most useful if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Currently hold an endowment, ULIP, or money-back LIC policy with premiums above ₹50,000/year</li>
+        <li>Have been paying premiums for 5+ years but haven't checked the internal rate of return (IRR)</li>
+        <li>Are unsure whether your life cover is adequate relative to your income and liabilities</li>
+        <li>Want to understand whether separating insurance from investment makes sense for your situation</li>
+      </ul>
+    </div>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This may not apply if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Your policy is within the first 2-3 years and surrender charges are steep — early exit may destroy value</li>
+        <li>You already have adequate term cover and view the LIC policy purely as a disciplined savings vehicle</li>
+        <li>Your total premium commitment is below ₹20,000/year, making the opportunity cost small</li>
+      </ul>
+    </div>
+
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Rupee Impact Scenario:</strong> Consider someone paying ₹1,00,000/year in endowment premiums for 25 years.
+      </p>
+      <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <li>Total premium outflow: ₹25,00,000</li>
+        <li>Typical endowment maturity at ~5-6% IRR: ₹40-45 lakh</li>
+        <li>Same amount in a diversified mutual fund SIP at ~12% historical CAGR: ₹85-95 lakh (illustrative, not assured)</li>
+        <li>Plus: a term plan for the same cover may cost ₹12,000-₹18,000/year, leaving most of the premium available for investing</li>
+      </ul>
+      <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+        Past performance is not indicative of future results. This is an illustrative comparison, not a recommendation.
+      </p>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 40px;">
@@ -1934,6 +2005,111 @@ export const staticBlogPost5 = {
       <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">IRDAI Licensed (277925) | AMFI Registered (ARN 90008)</p>
     </div>
   </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      SIP vs Lump Sum — Quick Decision Table
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      The SIP-vs-lump-sum debate depends on your specific cash flow, timeline, and temperament. Use this table as a starting framework, not a prescription.
+    </p>
+
+    <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 680px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Factor</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">SIP wins when</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Lump sum wins when</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Market level</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">At or near all-time highs</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">After a significant correction (15-30% drawdown)</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Investor temperament</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">You check portfolio daily and panic during drops</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">You deploy and forget for 5+ years</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Cash-flow source</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Monthly salary surplus</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">One-time windfall (bonus, inheritance, maturity)</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Time horizon</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">3-7 years (shorter, volatile range)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">10+ years (longer compounding runway)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      Neither SIP nor lump sum is universally superior. Historical data shows lump sum outperforms approximately 60-65% of the time over 10+ year periods — but SIP reduces regret risk in volatile markets.
+    </p>
+  </div>
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Analysis Is For — And Who Should Consider Alternatives
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Best suited for:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Someone who just received a bonus, maturity, or inheritance and is unsure how to deploy it</li>
+        <li>Current SIP investors wondering if they should top up via lump sum during corrections</li>
+        <li>First-time investors weighing the psychological comfort of SIP vs the mathematical edge of lump sum</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        You may skip this if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Your investable surplus is under ₹5,000/month — just start a SIP and stay consistent</li>
+        <li>You need the money within 2 years — neither approach is appropriate for short-term equity exposure</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Can I combine SIP and lump sum — investing monthly and adding lump sums during corrections?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Yes, this is often called the "SIP + opportunistic top-up" strategy. Continue your regular SIP for discipline and deploy lump sums when markets correct 10-15% or more. This removes the all-or-nothing framing. Many experienced investors follow this hybrid approach — it captures the behavioural benefits of SIP while retaining the flexibility to act on valuations.</p>
+    </div>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Does SIP always reduce risk compared to lump sum?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">SIP reduces timing risk, not investment risk. If the market declines steadily over your entire SIP tenure, you still face losses — SIP just spreads the purchase price. The key advantage is behavioural: SIP prevents the common mistake of entering with full capital at a market peak and then panicking during the first correction.</p>
+    </div>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">What about STP — Systematic Transfer Plan — as a middle ground?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">STP is essentially SIP from a liquid or debt fund into an equity fund. If you have a lump sum but want rupee-cost averaging, STP lets you park the money in a low-volatility fund and transfer fixed amounts weekly or monthly into equity. The typical STP duration is 6-12 months. It offers the psychological comfort of gradual entry while keeping idle capital productive.</p>
+    </div>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">How long should I continue a SIP before evaluating performance?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">At minimum, give an equity SIP 3-5 years before expecting meaningful compounding. Evaluating after 6-12 months is misleading because short-term market movements dominate returns. The real benefit of SIP — cost averaging through volatility — only materialises over multiple market cycles. Most financial planners recommend a 7-10 year review horizon for equity SIPs.</p>
+    </div>
+
+    <div>
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Is lump sum investing suitable for debt funds?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Yes. Debt funds have lower volatility, so the timing argument that favours SIP in equity is much weaker. For liquid funds, ultra-short-duration funds, and short-term FMPs, lump sum investment is standard practice. The rupee-cost averaging benefit of SIP is negligible in instruments that move 4-7% per year.</p>
+    </div>
+  </div>
+
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
@@ -2301,6 +2477,93 @@ export const staticBlogPost4 = {
       <p style="font-size: 15px; color: rgba(229, 229, 229, 0.7); font-style: italic;">IRDAI Licensed (277925) | AMFI Registered (ARN 90008)</p>
     </div>
   </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Old Regime vs New Regime — A Quick Comparison
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      Before optimising deductions, decide which tax regime works for your income level. The deductions discussed in this article apply primarily under the old regime.
+    </p>
+
+    <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 680px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Aspect</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Old Regime</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">New Regime</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">80C / 80D / HRA</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Available</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Not available (most deductions removed)</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Standard deduction</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">₹50,000</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">₹75,000 (Budget 2024)</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Slab rates</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Higher slabs but offset by deductions</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Lower slabs, simpler</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Best for</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Those with high deductions (HRA + 80C + 80D + NPS)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Those with few deductions or income below ₹15L</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      Tax laws change with each Budget. Numbers above are illustrative as of FY 2025-26. Verify with the latest Finance Act or a qualified CA.
+    </p>
+  </div>
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Is For — And Who Should Approach Differently
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This article is most useful if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Earn above ₹12-15 lakh annually and file under the old tax regime</li>
+        <li>Already claim 80C fully but haven't explored 80D, NPS (80CCD1B), or HRA optimisation</li>
+        <li>Run a freelance or consulting practice and want to structure deductions properly</li>
+        <li>Are salaried with components like HRA, LTA, and meal allowances that can be restructured</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        You may skip this if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You already file under the new regime with minimal deductions — focus instead on investment returns</li>
+        <li>Your total income is below ₹7 lakh (new regime rebate may eliminate your tax entirely)</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Can I claim deductions under both old and new tax regimes?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">No. You must choose one regime per financial year. Most deductions under Section 80C, 80D, and HRA apply only to the old regime. The new regime offers lower slab rates but removes most deductions. Salaried employees can switch between regimes each year; business owners generally cannot switch back after choosing the new regime.</p>
+    </div>
+  </div>
+
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
@@ -2727,6 +2990,97 @@ export const staticBlogPost6 = {
       </p>
     </div>
   </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Emergency Fund Parking — Where to Keep the Money
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      The purpose of an emergency fund is instant access, not high returns. Here is how to structure it for liquidity and safety.
+    </p>
+
+    <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 680px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Instrument</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Liquidity</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Indicative yield</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Suggested allocation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Savings account</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Instant</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">3-4%</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">1-2 months expenses</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Liquid mutual fund</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">T+1 day</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">5-6%</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">6-8 months expenses</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Short-duration FD / sweep-in FD</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Same-day (sweep)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">6-7%</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">2-4 months expenses</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      Yields shown are indicative as of early 2026. Liquid fund and FD returns vary by scheme/bank and are subject to change.
+    </p>
+  </div>
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Is For — And Who Should Adjust
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        The 12-month framework fits best if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Work in a sector with cyclical layoffs or contract-based roles (IT services, startups, media)</li>
+        <li>Are the sole earner in your household and carry EMI obligations</li>
+        <li>Live in Mumbai or another metro where fixed costs (rent, school fees, maintenance) are high</li>
+        <li>Have dependents who rely entirely on your monthly cash flow</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        You might adjust the target if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You are in a dual-income household with diversified income sources — 6-8 months may suffice</li>
+        <li>You work in a government or public-sector role with high job stability — 4-6 months could be adequate</li>
+        <li>You are early in your career with low fixed obligations — start with 3 months and build up over time</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Should I build the emergency fund before investing, or simultaneously?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Build at least 3 months of emergency reserves before starting equity SIPs. After that, you can build both simultaneously — allocate a fixed portion of monthly surplus to the emergency fund until you reach your target (6-12 months), while running SIPs in parallel. Trying to invest aggressively without an emergency buffer often leads to premature withdrawals during unexpected expenses, defeating the purpose of long-term compounding.</p>
+    </div>
+
+    <div>
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Can I use a credit card limit as an emergency fund substitute?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">No. Credit card limits are borrowed money at 36-42% annual interest if not repaid within the billing cycle. An emergency fund must be your own liquid capital. Credit cards can bridge a gap of 3-5 days while you liquidate a fund, but they are not a replacement for actual savings. Relying on credit during emergencies is how debt spirals begin.</p>
+    </div>
+  </div>
+
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
@@ -3231,6 +3585,72 @@ export const staticBlogPost7 = {
     </div>
   </div>
 
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Year-by-Year Compounding Reality
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      One of the most important and often overlooked aspects of this comparison is when the real divergence happens. For the first 5-7 years, all three instruments look roughly similar because compound interest needs time to work. The gap between ELSS and PPF is only ₹3-5 lakh after 7 years. It is in years 12-20 that the divergence accelerates dramatically.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      This is why financial planners repeat the phrase "start early." Someone who begins ELSS at age 25 and stays invested until 45 captures far more compounding benefit than someone who starts at 35 and tries to make up ground with higher contributions.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      However, this does not mean PPF is a bad choice. For someone approaching retirement at age 55, shifting from equity (ELSS) to debt (PPF) is a prudent risk-reduction move. The table above shows return potential, not risk-adjusted suitability. Your stage of life changes which column matters most.
+    </p>
+  </div>
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Comparison Is For — And Who Should Approach Differently
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This analysis is most useful if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Are salaried and deciding where to allocate your annual ₹1.5 lakh Section 80C investment</li>
+        <li>Have 10+ years until you need the money and can accept short-term equity volatility</li>
+        <li>Want to understand the real long-run trade-offs, not just current-year tax savings</li>
+        <li>File under the old tax regime where 80C deductions remain available</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Consider a different lens if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You file under the new tax regime where Section 80C deductions are not applicable</li>
+        <li>You are within 5 years of retirement and capital preservation matters more than growth</li>
+        <li>You already have significant equity exposure outside of tax-saving instruments and need debt allocation</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Can I invest in all three — ELSS, PPF, and NPS — simultaneously?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Yes, and many financial planners recommend exactly this approach. You could allocate ₹50,000 to NPS (for the additional 80CCD(1B) deduction), ₹50,000 to PPF (for debt stability and guaranteed returns), and ₹50,000 to ELSS (for equity growth). This gives you ₹1.5 lakh in 80C plus ₹50,000 additional through NPS — a total of ₹2 lakh in tax-saving investments with diversified risk across equity, debt, and retirement.</p>
+    </div>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">What happens to NPS money at retirement? Is it fully locked?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">At age 60, you can withdraw up to 60% of the NPS corpus as a lump sum (tax-free). The remaining 40% must be used to purchase an annuity from an insurance company, which provides regular pension income. The annuity is taxable as income. Partial withdrawals from NPS are allowed after 3 years for specific purposes like higher education, home purchase, or medical treatment — up to 25% of your own contributions.</p>
+    </div>
+
+    <div>
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">ELSS has a 3-year lock-in, but should I redeem after 3 years?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">The 3-year lock-in is the minimum, not the recommended holding period. Equity investments generally benefit from 7-10+ year holding periods. Each ELSS SIP instalment has its own 3-year lock-in, so the earliest units become redeemable first. If you do not need the money, let the investments compound — treating ELSS as a long-term equity holding rather than a short-term tax-saving exercise produces significantly better outcomes.</p>
+    </div>
+  </div>
+
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 40px;">
@@ -3661,6 +4081,68 @@ export const staticBlogPost8 = {
       </p>
     </div>
   </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      The Hidden Cost: Healthcare Inflation in Mumbai
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      General consumer inflation in India averages 6-7% per year. But healthcare inflation runs significantly higher — studies estimate 10-14% annually for hospital procedures, medications, and specialist consultations. For a retired couple in Mumbai, a single hospitalisation without adequate health insurance can wipe out 6-12 months of corpus withdrawals.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      This is why every retirement plan for Mumbai must account separately for medical costs. If Rakesh (from the case above) faces a ₹5-8 lakh medical event in his first 5 years of retirement, his ₹1 crore corpus drops to ₹92-95 lakh — reducing his sustainable monthly withdrawal from ₹58,000 to roughly ₹53,000-55,000 per month.
+    </p>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      Comprehensive health insurance (₹25-50 lakh sum insured for a couple) typically costs ₹25,000-₹60,000 per year in premiums at age 60, depending on the insurer and existing conditions. This is an essential expense, not an optional one, and should be factored into monthly outflows.
+    </p>
+  </div>
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Reality Check Is For — And Who Can Relax
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This article is most relevant if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Are within 5-10 years of retirement and your corpus projection shows ₹1-2 crore</li>
+        <li>Live in Mumbai, Delhi NCR, Bangalore, or another Tier-1 city where monthly expenses routinely exceed ₹80,000-₹1 lakh</li>
+        <li>Have not stress-tested your retirement math with different inflation and withdrawal rate assumptions</li>
+        <li>Rely primarily on EPF/PPF/FD for retirement savings without any equity allocation</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        You may be better positioned if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You plan to retire in a Tier-2 city (Pune, Nashik, Jaipur) where living costs are 40-50% lower</li>
+        <li>You have pension income from government service that covers 50%+ of monthly expenses independently</li>
+        <li>You own your home outright and have no EMI obligations — eliminating the largest fixed-cost category</li>
+        <li>You have rental income from a second property generating ₹20,000-30,000/month supplementary income</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">What withdrawal rate is sustainable for a ₹1 crore corpus over 25 years?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">A common guideline is the 4% rule — withdrawing 4% of your corpus in year one, then adjusting for inflation annually. For ₹1 crore, that means starting at ₹4 lakh per year (roughly ₹33,000/month). However, this rule was designed for US markets with different inflation and return characteristics. Indian retirees facing 6-7% consumer inflation and higher healthcare inflation may need a more conservative 3-3.5% initial withdrawal rate unless their corpus is partially invested in equity for real growth.</p>
+    </div>
+
+    <div>
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Should I keep my retirement corpus entirely in fixed deposits for safety?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">No. A 100% FD allocation may feel safe, but FD returns (6-7%) barely match inflation. After tax, real returns can be near zero or negative. Most retirement portfolios benefit from a balanced allocation: 30-40% in equity mutual funds for growth, 40-50% in high-quality debt (PPF, G-sec, bonds), and 10-20% in liquid instruments for immediate needs. This structure provides growth to combat inflation while maintaining enough stability for regular withdrawals.</p>
+    </div>
+  </div>
+
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
@@ -4178,6 +4660,34 @@ export const staticBlogPost9 = {
     </div>
   </div>
 
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who This Comparison Helps — And Who Needs a Different Lens
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This analysis fits best if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You are debating between a second property investment and adding to your mutual fund portfolio</li>
+        <li>You have a lump sum of ₹30-60 lakh and want a data-backed comparison of real estate vs financial assets</li>
+        <li>You want to understand total cost of ownership — maintenance, property tax, vacancy risk — not just headline appreciation</li>
+        <li>You are investing for 10+ years and can tolerate equity market volatility for potentially higher compounding</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Consider adjusting if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You are buying your first (primary) home — that decision is part housing need, part investment, and this article focuses on pure investment comparison</li>
+        <li>You live in a high-growth corridor (e.g., Navi Mumbai metro line catchment) where land value dynamics differ from mature suburbs</li>
+        <li>You need regular rental income for monthly cash flow — mutual funds require SWP setup which behaves differently</li>
+      </ul>
+    </div>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 40px;">
@@ -4681,6 +5191,60 @@ export const staticBlogPost10 = {
     </div>
   </div>
 
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Physical vs Digital vs SGB — Decision Framework
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      Choosing the right gold format depends on why you are investing in gold. Use this decision framework to match your intent to the most efficient vehicle.
+    </p>
+    <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 680px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">If your goal is</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Best format</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Why</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Wedding/jewellery</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Physical gold or gold coins</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Direct utility — though making charges add 8-25% cost</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Portfolio hedge (5-10% allocation)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Digital gold / Gold ETF</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Instant buy/sell, no storage cost, tracks live gold price</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Long-term wealth (8+ years)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Sovereign Gold Bond (SGB)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">2.5% annual interest + capital gains tax-free at maturity</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      SGB availability depends on RBI issuance schedule. Secondary market SGBs are available on exchanges but may trade at premium/discount to NAV.
+    </p>
+  </div>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">How much of my portfolio should be in gold?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Most financial planners recommend 5-10% of your total portfolio in gold as a diversification hedge. Gold tends to perform well during equity downturns, geopolitical uncertainty, and inflationary periods. Going above 15% in gold typically reduces overall portfolio returns in the long run because gold does not generate income (dividends or interest) the way equities and bonds do.</p>
+    </div>
+  </div>
+
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
   <div style="background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 40px;">
@@ -5125,6 +5689,42 @@ export const staticBlogPost11 = {
       </p>
     </div>
   </a>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who Should Use This Guide — And Who Should Simplify
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        This guide is most useful if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Earn ₹15 lakh+ annually and your monthly credit card spend exceeds ₹50,000 across categories</li>
+        <li>Already hold 1-2 cards and want to assess whether upgrading or adding a premium card improves net value</li>
+        <li>Travel frequently (domestic or international) and want to maximise lounge, insurance, and forex benefits</li>
+        <li>Manage business expenses alongside personal spend and need clear segregation with separate cards</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Keep it simpler if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Your total monthly card spend is under ₹20,000 — a single no-fee card with basic rewards is usually sufficient</li>
+        <li>You struggle with credit card repayment discipline — optimising rewards is pointless if interest charges erase them</li>
+        <li>You prefer the simplicity of one card for everything — choose the best all-rounder and avoid card-hopping</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 55px 0;">
+    <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">
+      <strong style="color: var(--lux-accent);">A note on credit discipline:</strong> The most profitable credit card is the one you pay in full every month. Carrying a balance at 36-42% APR instantly negates any reward or cashback benefit. Before optimising for rewards, ensure you have the cash flow to clear every statement completely by the due date.
+    </p>
+  </div>
+
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
@@ -5752,6 +6352,86 @@ export const staticBlogPost12 = {
       </p>
     </div>
   </a>
+
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Personal Loan Cost Structure — What You Actually Pay
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      The interest rate is just one component of borrowing cost. Processing fees, prepayment charges, and GST on fees all add to the effective cost. Here is a realistic breakdown professionals should evaluate before signing.
+    </p>
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Scenario:</strong> ₹5,00,000 personal loan at 11% p.a. for 24 months
+      </p>
+      <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <li>EMI: ≈ ₹23,400/month</li>
+        <li>Total interest over 24 months: ≈ ₹61,600</li>
+        <li>Processing fee (2% typical): ₹10,000 + GST ₹1,800 = ₹11,800</li>
+        <li>Prepayment penalty (if you close early): 2-4% of outstanding — often ₹5,000-₹15,000</li>
+        <li><strong style="color: var(--lux-accent);">Total effective cost: ~₹73,400-₹88,400</strong> depending on prepayment timing</li>
+      </ul>
+      <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+        Rates, fees, and terms vary by lender and credit score. Always request the full loan schedule and fee disclosure before signing.
+      </p>
+    </div>
+  </div>
+
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Who Should Consider a Personal Loan — And Who Should Avoid
+    </h2>
+    <div style="margin-bottom: 30px;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        A personal loan may make sense if you:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>Have a short-term cash-flow gap (3-18 months) and a clear repayment plan from future income</li>
+        <li>Need funds urgently (medical, education) and cannot liquidate investments without significant loss or tax impact</li>
+        <li>Have a strong credit score (750+) qualifying you for competitive rates under 12-13% p.a.</li>
+        <li>Want unsecured borrowing to avoid pledging assets — and you are comfortable with the higher rate trade-off</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 18px;">
+        Avoid a personal loan if:
+      </h3>
+      <ul style="font-size: 18px; line-height: 2.2; color: #E5E5E5; margin-left: 20px;">
+        <li>You are borrowing to invest — leveraged investing amplifies both gains and losses and is unsuitable for most people</li>
+        <li>You already have high existing EMI obligations (EMI-to-income ratio above 40-50%)</li>
+        <li>A lower-cost alternative is available: loan against FD (8-9%), loan against mutual funds (9-11%), or employer advance</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <div style="margin: 55px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      Frequently Asked Questions
+    </h2>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">What credit score do I need for the best personal loan rates?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">A CIBIL score of 750 or above generally qualifies you for the lowest interest rates (10-12% p.a.) from major banks. Scores between 700-750 may still get approval but at higher rates (13-16%). Below 700, most mainstream lenders decline the application or offer rates above 18%, at which point you should seriously reconsider whether borrowing makes financial sense. Check your credit score before applying — each application creates a hard inquiry that temporarily lowers your score.</p>
+    </div>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Should I take a personal loan to invest in the stock market?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">No. Leveraged investing — borrowing at 11-14% to invest in assets that may or may not return more — is unsuitable for most individuals. If the market drops 10-15% in your loan tenure, you face a double loss: negative investment returns plus ongoing EMI obligation. Personal loans make sense for genuine cash-flow gaps (medical expenses, education fees, bridge financing) — not for speculative investments.</p>
+    </div>
+
+    <div style="margin-bottom: 28px;">
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">Is prepayment always a good idea for personal loans?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Mathematically, yes — prepayment saves interest. However, check for prepayment penalties first: many banks charge 2-4% of the outstanding principal if you close the loan before tenure. If the penalty exceeds the interest savings, partial prepayment (reducing EMI or tenure) could be a better strategy. Some banks waive prepayment charges after a certain period — typically 6-12 months. Always request the full prepayment schedule in writing before deciding.</p>
+    </div>
+
+    <div>
+      <h3 style="font-size: 22px; color: var(--lux-accent); margin-bottom: 12px; font-family: 'Playfair Display', serif;">How many personal loans can I have at the same time?</h3>
+      <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">There is no legal limit, but lenders evaluate your total EMI-to-income ratio. Most banks consider 40-50% of net monthly income as the maximum combined EMI burden. Having multiple active personal loans signals financial stress to lenders and will lower your credit score. If you need a second loan before the first is paid off, it is usually a sign that your cash-flow issue is structural — not something another loan will fix.</p>
+    </div>
+  </div>
+
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
