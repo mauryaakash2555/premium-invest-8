@@ -5147,6 +5147,103 @@ const staticBlogPost12_legacy = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Who Should Consider a Personal Loan?</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
+    A personal loan can be a reasonable option for professionals who have reliable cash inflows, a temporary mismatch in timing, and a clear repayment plan. Typically, lenders look for stable income (salaried or self-employed with consistent bank credits), a decent credit profile (often a healthy CIBIL score range), and a verifiable employment or business track record.
+  </p>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">It can be especially relevant if you:</p>
+  <ul style="margin: 0 0 25px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Have predictable monthly income but a one-time near-term expense</li>
+    <li>Want a defined EMI schedule instead of revolving debt</li>
+    <li>Can close the loan early if income spikes (bonus, incentives, business collections)</li>
+  </ul>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
+    If income is irregular, credit is already stretched, or the loan is meant to fund lifestyle spending, the same product can become a long-term drag.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Real EMI Scenario: ₹3,00,000 at 14% vs 18%</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+    To make the decision concrete, here is a simple EMI comparison on a ₹3,00,000 personal loan at two interest rates (14% and 18%) across two common tenures. These are approximate EMIs calculated using standard amortization.
+  </p>
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 18px;">
+    <h3 style="color: var(--lux-accent); font-size: 22px; margin: 0 0 12px; font-family: 'Playfair Display', serif;">12 months</h3>
+    <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.78); margin: 0 0 10px;">At 14% p.a.: EMI ≈ ₹26,936/month; total repaid ≈ ₹3,23,234; total interest ≈ ₹23,234.</p>
+    <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.78); margin: 0 0 10px;">At 18% p.a.: EMI ≈ ₹27,504/month; total repaid ≈ ₹3,30,048; total interest ≈ ₹30,048.</p>
+    <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.70); margin: 0; font-style: italic;">Difference: about ₹568/month higher EMI and about ₹6,814 more interest at 18% (vs 14%).</p>
+  </div>
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 26px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 0;">
+    <h3 style="color: var(--lux-accent); font-size: 22px; margin: 0 0 12px; font-family: 'Playfair Display', serif;">24 months</h3>
+    <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.78); margin: 0 0 10px;">At 14% p.a.: EMI ≈ ₹14,404/month; total repaid ≈ ₹3,45,693; total interest ≈ ₹45,693.</p>
+    <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.78); margin: 0 0 10px;">At 18% p.a.: EMI ≈ ₹14,977/month; total repaid ≈ ₹3,59,454; total interest ≈ ₹59,454.</p>
+    <p style="font-size: 16px; line-height: 1.85; color: rgba(229, 229, 229, 0.70); margin: 0; font-style: italic;">Difference: about ₹573/month higher EMI and about ₹13,761 more interest at 18% (vs 14%).</p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Quick Comparison: Personal Loan vs Credit Card EMI vs Overdraft</h2>
+
+  <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); border-radius: 12px; background: rgba(255, 255, 255, 0.02);">
+    <table style="width: 100%; border-collapse: collapse; min-width: 760px;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(229,229,229,0.72); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);">Option</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(229,229,229,0.72); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);">How it usually works</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(229,229,229,0.72); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);">Best for</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(229,229,229,0.72); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent);">Primary risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent); font-weight: 600;">Personal Loan</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent);">Fixed EMI schedule; interest cost depends on rate + tenure; may include processing fees</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent);">Defined short-term cashflow gaps with a clear repayment plan</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent);">Over-borrowing or stretching tenure, increasing total interest</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent); font-weight: 600;">Credit Card EMI</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent);">Converts a specific spend into installments; costs vary by issuer, offers, and tenure</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent);">Discrete purchases where you can repay quickly and avoid revolving balances</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 12%, transparent);">Rolling into revolving debt if cashflow slips; higher effective cost if not managed</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; font-weight: 600;">Overdraft</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78);">Flexible drawdown up to a limit; interest typically charged on utilized amount, often with annual/renewal conditions</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78);">Very short, unpredictable timing gaps where flexibility is more important than lowest cost</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.78);">Using it as permanent working capital, turning a short gap into a long habit</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">FAQ: Personal Loans in India</h2>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 12px;">1) What CIBIL score is usually required for a personal loan?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Eligibility varies by lender, but a stronger CIBIL score generally improves approval odds and pricing. Beyond the number, lenders also look at repayment history, existing EMIs, and recent credit inquiries.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 12px;">2) What documents are commonly needed?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Most lenders ask for identity/address proof, income proof (salary slips or ITR), and recent bank statements. Self-employed borrowers may need business proof and a longer income trail.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 12px;">3) Are processing fees and insurance mandatory?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Processing fees are common and should be evaluated as part of total cost. Some lenders bundle optional products; it is worth confirming what is optional vs required before you accept a sanction letter.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 12px;">4) Can I prepay or foreclose early?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">Many personal loans allow partial prepayment or foreclosure, but the rules and charges can vary. For professionals with bonuses or variable business cashflows, prepayment flexibility is a key feature to compare.</p>
+
+  <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin: 0 0 12px;">5) What is a safe way to decide the right tenure?</h3>
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">Start with the smallest tenure that keeps the EMI comfortable while preserving emergency liquidity. Shorter tenure usually reduces total interest, but only if you can sustain the EMI without relying on new debt.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Key Factors Professionals Must Evaluate</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">Before considering any personal loan, review the following carefully:</p>
