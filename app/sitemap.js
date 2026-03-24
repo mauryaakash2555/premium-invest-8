@@ -2,8 +2,6 @@ import { getMetadataBase } from "@/lib/seo/metadata";
 import { staticBlogData, staticBlogPost } from "@/data/staticBlogData";
 import storeProducts from "@/data/store-products.json";
 import { headers } from "next/headers";
-import fs from "fs";
-import path from "path";
 
 function url(base, path) {
   const cleanBase = String(base || "").replace(/\/$/, "");
@@ -33,7 +31,6 @@ export default async function sitemap() {
   const base = (isStoreHost ? "https://store.bmwealth.co.in" : getMetadataBase().toString()).replace(/\/$/, "");
 
   // Use realistic per-page dates instead of always-now (wastes crawl budget).
-  const SITE_LAUNCH = new Date("2025-12-01");
   const LAST_STATIC_UPDATE = new Date("2026-02-18");
 
   const blogs = Array.isArray(staticBlogData) && staticBlogData.length > 0 ? staticBlogData : [staticBlogPost];
@@ -53,65 +50,6 @@ export default async function sitemap() {
     : blogs
         .map((b) => (b?.slug ? `/blog/${String(b.slug).replace(/^\/+/, "")}` : null))
         .filter(Boolean);
-
-  const discoverAppRoutes = () => {
-    const appDir = path.join(process.cwd(), "app");
-    const discovered = new Set();
-
-    const shouldExcludeSegment = (segment) => {
-      if (!segment) return true;
-      if (segment === "api") return true;
-      if (segment === "admin") return true;
-      if (segment === "store") return true; // internal store shell; exposed via store hostname rewrite
-      if (segment === "products") return true; // blocked on main host; store has clean /products
-      if (segment === "login") return true;
-      if (segment === "dashboard") return true;
-      if (segment === "client-portal") return true;
-      if (segment === "embed") return true;
-      if (segment === "cdn-cgi") return true;
-      if (segment === "track") return true;
-      if (segment === "v0-test") return true;
-      if (segment === "sitemap-page") return true;
-      if (segment.startsWith("_")) return true;
-      if (segment.startsWith("__")) return true;
-      if (segment.startsWith("admin-secret")) return true;
-      if (segment.startsWith("[")) return true; // dynamic segment
-      return false;
-    };
-
-    const isGroupSegment = (segment) => segment.startsWith("(") && segment.endsWith(")");
-
-    const walk = (dir) => {
-      const entries = fs.readdirSync(dir, { withFileTypes: true });
-      for (const entry of entries) {
-        if (entry.name.startsWith(".")) continue;
-        const full = path.join(dir, entry.name);
-        if (entry.isDirectory()) {
-          if (shouldExcludeSegment(entry.name)) continue;
-          walk(full);
-        } else if (entry.isFile()) {
-          if (!/^page\.(js|jsx|ts|tsx)$/.test(entry.name)) continue;
-          const relDir = path.relative(appDir, dir);
-          const segments = relDir
-            .split(path.sep)
-            .filter(Boolean)
-            .filter((s) => !isGroupSegment(s))
-            .filter((s) => !shouldExcludeSegment(s));
-
-          const route = `/${segments.join("/")}`.replace(/\/+$/, "");
-          discovered.add(route === "" ? "/" : route);
-        }
-      }
-    };
-
-    try {
-      if (fs.existsSync(appDir)) walk(appDir);
-    } catch {
-      // ignore discovery errors; sitemap will still include manual + blog routes
-    }
-
-    return Array.from(discovered);
-  };
 
   if (isStoreHost) {
     const productRoutes = Array.isArray(storeProducts)
@@ -136,19 +74,20 @@ export default async function sitemap() {
     return unique.map((p) => ({ url: url(base, p), lastModified: LAST_STATIC_UPDATE }));
   }
 
-  const appRoutes = discoverAppRoutes();
-
-  // Explicit public surface for main site (kept small + stable).
+  // Strict allowlist for main site (kept small + stable).
   const routes = [
     "/",
     "/tools",
     "/tools/property-vs-sip",
+    "/tools/retirement-gap",
+    "/tools/lumpsum-planner",
+    "/tools/insurance-value",
     "/tools/tax-optimization",
     "/tools/itr-filing-help",
     // /blog is the canonical blog index (must not be a redirect-only URL)
     "/blog",
-    // Blog pillar indexes (keep explicit so they're present even if route discovery fails)
-    "/blog/editorial",
+    "/execution-partners",
+    "/legal-disclosures",
     "/contact",
     "/about-us",
     "/services",
@@ -179,6 +118,10 @@ export default async function sitemap() {
     "/live-intel",
     "/submit",
     "/sitemap",
+    "/tools/blog-image",
+    "/tools/calc-share",
+    "/universe",
+    "/universe/learn",
     "/blog/dev",
     "/blog/impact",
     "/blog/guest",
@@ -206,7 +149,7 @@ export default async function sitemap() {
     return excludedPrefix.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
   };
 
-  const unique = Array.from(new Set([ ...routes, ...appRoutes, ...blogRoutes].map(normalizePathname)))
+  const unique = Array.from(new Set([ ...routes, ...blogRoutes].map(normalizePathname)))
     .filter((p) => !isExcluded(p));
 
   // Frequently updated pages get today's date; static pages get LAST_STATIC_UPDATE; blogs get their published date.

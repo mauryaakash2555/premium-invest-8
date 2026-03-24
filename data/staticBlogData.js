@@ -4903,6 +4903,108 @@ export const staticBlogPost11 = {
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Top 5 Premium (HNI-Style) Credit Cards in India — Comparison Table</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+    The goal of this table is not to promote a specific product, but to provide a structured shortlist of premium cards that high-income professionals commonly evaluate.
+    Product names, eligibility, fees, and benefits can change, so treat this as a framework for due diligence.
+  </p>
+
+  <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+    <table style="width: 100%; border-collapse: collapse; min-width: 860px;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Example card</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Best fit</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">What to verify</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Disciplined usage test</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">HDFC Infinia (premium)</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">High spend + stable long-term usage</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Eligibility norms, service experience, renewal terms</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Would you keep it even if benefits change?</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">ICICI Emeralde (premium)</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Banking relationship + predictable servicing</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Fee clarity, support quality, statement UX</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Does it simplify your system?</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Axis Magnus (premium)</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Strong digital onboarding + mainstream acceptance</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Fee/waiver rules, policy changes, dispute process</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Can you use it with zero promotional behaviour?</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">SBI Aurum / Elite (premium)</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Diversifying issuer risk + broad domestic acceptance</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Service model, credit limit policy, fee structure</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Does it reduce dependency on one bank?</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">American Express Platinum Charge / Platinum Travel</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Travel-heavy users who value service predictability</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Acceptance coverage in your spend categories</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Will you still keep a Visa/Mastercard backup?</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size: 15px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+    Editorial note: “Top 5” here refers to commonly-shortlisted premium cards, not a ranking. Always verify official terms and assess fit to your expense pattern and repayment discipline.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">A Rupee Spend Scenario (Cash-Flow Value, Not Rewards)</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+    Most disciplined professionals benefit from a credit card because it improves timing and liquidity discipline — not because it creates “free money”.
+    Here is a realistic example you can adapt.
+  </p>
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;"><strong style="color: var(--lux-accent);">Scenario:</strong> ₹3,00,000 of monthly expenses routed through a primary credit card, paid in full on the due date.</p>
+    <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+      <li>Average outstanding balance through the month is roughly ~50% of monthly spend (because spending is spread out)</li>
+      <li>So average “float” ≈ ₹1,50,000</li>
+      <li>If the same ₹1,50,000 stays in a liquid instrument at ~5% p.a., the interest value of that float is ≈ ₹1,50,000 × (5%/12) ≈ ₹625 per month (rounded)</li>
+    </ul>
+    <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+      This is a simplification: actual value depends on your billing cycle, salary date, spending pattern, and where you keep the cash.
+    </p>
+  </div>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">
+    The larger benefit is often behavioural: consolidated statements, better bill timing, and fewer accidental cash shortfalls — provided you always pay the full amount.
+  </p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">FAQ (High-Income Credit Card Setup)</h2>
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 0;">
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">1) How many credit cards should a high-income professional keep?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">Often one primary card plus one backup issuer is enough. More cards can reduce reliability if it increases tracking complexity or leads to missed due dates.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">2) What is a safe utilisation level?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">There is no universal number, but disciplined users typically avoid running close to the full limit. A practical rule is: keep utilisation low enough that you could repay comfortably even in a disrupted month.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">3) Should I choose a card based on “lifestyle benefits”?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">Use benefits as a tie-breaker only after reliability, fee clarity, and service quality are acceptable. Benefits change; repayment discipline and account health do not.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">4) How should I align statement date and due date?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">Align the due date with a stable inflow (salary date or predictable receipts). The best setup reduces the risk of timing mismatches and ensures full payment without stress.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">5) Is it acceptable to carry a balance “temporarily”?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">For this article’s intended audience, no. If you anticipate carrying a balance, treat it as a liquidity problem and evaluate structured credit (like a loan/line) instead of revolving at high cost.</p>
+  </div>
+
   <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Final Thoughts</h2>
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">
@@ -5112,6 +5214,133 @@ const staticBlogPost12_legacy = {
 
   <p style="font-size: 18px; line-height: 2; margin-bottom: 22px; color: #E5E5E5;">They are a temporary instrument, not a permanent solution.</p>
   <p style="font-size: 18px; line-height: 2; margin-bottom: 0; color: #E5E5E5;">When integrated thoughtfully, they can support financial continuity without disrupting long-term plans.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Typical Eligibility Criteria (Indicative)</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">Eligibility differs by lender and profile, but professionals can use this checklist before applying:</p>
+  <ul style="margin: 0 0 25px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+    <li>Stable income proof (salary slips / ITR, bank statement cashflows)</li>
+    <li>Employment stability or business continuity (time in current role / years in business)</li>
+    <li>Credit history quality (clean repayment record; limited recent enquiries)</li>
+    <li>Reasonable existing EMI burden relative to take-home income</li>
+    <li>Clear documentation: identity, address, income, and bank statements</li>
+  </ul>
+
+  <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.75); font-style: italic;">This is a planning checklist, not approval advice. Always verify the lender’s official eligibility rules.</p>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">EMI Comparison Example (With Numbers)</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+    EMIs look manageable when viewed in isolation. The disciplined approach is to compare EMI, total interest, and the stress it adds to your monthly cashflow.
+    Below is an illustrative example.
+  </p>
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;"><strong style="color: var(--lux-accent);">Assumption:</strong> Loan amount ₹3,00,000 at 14% p.a. (reducing), processing fees ignored for simplicity.</p>
+    <div style="overflow-x: auto; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(0,0,0,0.15);">
+      <table style="width: 100%; border-collapse: collapse; min-width: 680px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 12px 14px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid rgba(255,255,255,0.08);">Tenure</th>
+            <th style="text-align: left; padding: 12px 14px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid rgba(255,255,255,0.08);">Approx EMI</th>
+            <th style="text-align: left; padding: 12px 14px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid rgba(255,255,255,0.08);">Approx total interest</th>
+            <th style="text-align: left; padding: 12px 14px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid rgba(255,255,255,0.08);">Practical note</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px 14px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">12 months</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">₹26,980</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">~₹23,760</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Lower interest, higher monthly stress</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 14px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">24 months</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">₹14,438</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">~₹46,512</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Balanced EMI, moderate interest</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 14px; font-size: 16px; color: #E5E5E5;">36 months</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: #E5E5E5;">₹10,280</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: rgba(229,229,229,0.85);">~₹70,080</td>
+            <td style="padding: 12px 14px; font-size: 16px; color: rgba(229,229,229,0.85);">Lower EMI, higher total interest</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size: 15px; line-height: 1.9; margin: 14px 0 0; color: rgba(229,229,229,0.70); font-style: italic;">Rounded illustration. Actual APR, fees, insurance add-ons, and prepayment rules can materially change cost.</p>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">Personal Loan vs Common Alternatives (Quick Comparison)</h2>
+
+  <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">A personal loan is one option. Professionals should compare it to alternatives on cost and behavioural risk:</p>
+
+  <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+    <table style="width: 100%; border-collapse: collapse; min-width: 860px;">
+      <thead>
+        <tr>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Option</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">When it fits</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Main risk</th>
+          <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Discipline rule</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Personal loan</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Defined short-term mismatch + stable repayment capacity</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Over-borrowing and long tenure for a short problem</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Borrow only for the gap; plan an exit date</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Credit card revolving</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Rarely fits for planned liquidity</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">High cost and habit formation</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Avoid carrying balances; pay full due</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Overdraft / line of credit</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Variable short gaps, flexible repayment timing</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Can become a permanent running balance</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Set a max draw and repayment cadence</td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Emergency fund drawdown</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Genuine emergencies; avoids new debt</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">If not replenished, future emergencies become costly</td>
+          <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Rebuild the fund before new investments</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
+
+  <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">FAQ (Practical Questions)</h2>
+
+  <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 0;">
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">1) How do I decide the loan amount?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">Start with the exact timing gap you need to bridge, then add a small buffer for fees. Avoid borrowing “maximum eligible” amounts unless there is a defined use and repayment plan.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">2) Which tenure is safer — shorter or longer?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">Shorter reduces interest but increases EMI stress. The safer choice is the tenure where the EMI remains comfortable even if income is disrupted for 1–2 months.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">3) What should I check beyond EMI?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">APR/annualized cost, processing fees, insurance add-ons, foreclosure rules, part-payment terms, and whether the lender forces cross-sell conditions.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">4) Is prepayment always a good idea?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0 0 18px; color: #E5E5E5;">Prepayment usually reduces interest, but only if you preserve your emergency fund and insurance coverage. Also confirm any foreclosure charges and lock-in periods.</p>
+
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 26px; color: var(--lux-accent); margin: 0 0 10px;">5) When should I avoid taking the loan entirely?</h3>
+    <p style="font-size: 18px; line-height: 2; margin: 0; color: #E5E5E5;">Avoid it when the purpose is discretionary lifestyle spending, when EMIs would crowd out essentials/savings, or when the cashflow gap is recurring (a budgeting issue, not a financing issue).</p>
+  </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 55px 0;" />
 

@@ -5,6 +5,7 @@ export const metadata = buildMetadata({
   description:
     'Explore editorial learning hubs for investing, tax, mutual funds, and financial planning concepts with practical context.',
   path: '/universe/learn',
+  robots: { index: false, follow: false },
 });
 
 export default function Layout({ children }) {

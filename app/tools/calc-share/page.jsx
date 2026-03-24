@@ -59,6 +59,7 @@ export async function generateMetadata({ searchParams }) {
   return {
     title,
     description,
+    robots: { index: false, follow: false },
     openGraph: {
       title,
       description,
