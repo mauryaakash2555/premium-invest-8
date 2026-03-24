@@ -5,6 +5,7 @@ export const metadata = buildMetadata({
   description:
     'Live Intelligence helps you explore market updates, insights, and financial context in a clean, fast interface. Review everything carefully before acting.',
   path: '/live-intelligence',
+  robots: { index: false, follow: false },
 });
 
 import Link from 'next/link';

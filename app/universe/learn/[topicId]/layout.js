@@ -18,6 +18,7 @@ export async function generateMetadata({ params }) {
     description:
       `Editorial learning hub for ${topicTitle}. Explore core concepts, examples, practice prompts, and related financial insights.`,
     path: `/universe/learn/${topicId}`,
+    robots: { index: false, follow: false },
   });
 }
 
