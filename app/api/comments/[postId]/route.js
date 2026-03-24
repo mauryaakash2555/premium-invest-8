@@ -152,7 +152,7 @@ export async function POST(request, { params }) {
                       'unknown';
     const user_agent = request.headers.get('user-agent') || 'unknown';
 
-    // Insert comment (auto-approved for now, add moderation later)
+    // Insert comment (moderated)
     const { data, error } = await supabase
       .from('comments')
       .insert({
@@ -160,7 +160,7 @@ export async function POST(request, { params }) {
         author_name: author_name.trim(),
         author_email: author_email.trim().toLowerCase(),
         comment_text: sanitizedComment,
-        status: 'approved', // Change to 'pending' if you want moderation
+        status: 'pending',
         ip_address,
         user_agent,
       })
@@ -177,7 +177,7 @@ export async function POST(request, { params }) {
 
     return NextResponse.json({
       success: true,
-      message: 'Comment posted successfully',
+      message: 'Comment submitted for moderation',
       comment: data,
     });
 

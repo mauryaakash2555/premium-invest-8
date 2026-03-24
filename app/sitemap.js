@@ -149,7 +149,6 @@ export default async function sitemap() {
     "/blog",
     // Blog pillar indexes (keep explicit so they're present even if route discovery fails)
     "/blog/editorial",
-    "/live-intelligence",
     "/contact",
     "/about-us",
     "/services",
@@ -176,6 +175,7 @@ export default async function sitemap() {
     "/refund-policy",
     "/payment-success",
     "/payment-failed",
+    "/live-intelligence",
     "/live-intel",
     "/submit",
     "/sitemap",
@@ -210,7 +210,7 @@ export default async function sitemap() {
     .filter((p) => !isExcluded(p));
 
   // Frequently updated pages get today's date; static pages get LAST_STATIC_UPDATE; blogs get their published date.
-  const frequentlyUpdated = new Set(["/", "/blog", "/live-intelligence"]);
+  const frequentlyUpdated = new Set(["/", "/blog"]);
 
   return unique.map((p) => {
     let lastMod = LAST_STATIC_UPDATE;

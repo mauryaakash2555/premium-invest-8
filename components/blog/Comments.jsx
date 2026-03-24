@@ -253,7 +253,11 @@ export default function Comments({ postId, postSlug, postTitle, contextTitle, co
     });
   };
 
-  const normalized = (Array.isArray(comments) ? comments : []).map((c) => {
+  const approvedComments = (Array.isArray(comments) ? comments : []).filter(
+    (c) => String(c?.status || '').toLowerCase() === 'approved'
+  );
+
+  const normalized = approvedComments.map((c) => {
     const id = c?.id ?? c?._id;
     const stableId = String(id || '').trim() || String(c?.created_at || '') || '';
     const parsed = stripMarkers(c?.comment_text);
@@ -527,7 +531,7 @@ export default function Comments({ postId, postSlug, postTitle, contextTitle, co
                 </label>
               </div>
               {submitStatus === 'success' && (
-                <span className="text-emerald-400 text-xs">Posted!</span>
+                <span className="text-emerald-400 text-xs">Submitted for review.</span>
               )}
               {submitStatus === 'error' && (
                 <span className="text-red-400 text-xs">Failed. Try again.</span>
