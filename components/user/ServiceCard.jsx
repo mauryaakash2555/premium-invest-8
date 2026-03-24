@@ -69,6 +69,14 @@ export default function ServiceCard({ service, index = 0 }) {
   const isFixedDeposits = service?.key === 'fixed-deposits';
   const isSip = service?.key === 'sip';
   const isPremiumImageCard = isMutualFunds || isPortfolioManagement || isInsurance || isTradingServices || isFixedDeposits || isSip;
+  const premiumServiceImageAlt =
+    (service?.key === 'portfolio-management' && 'Portfolio management services Mumbai') ||
+    (service?.key === 'mutual-funds' && 'Mutual funds advisory Mumbai') ||
+    (service?.key === 'insurance' && 'Insurance advisory services Mumbai') ||
+    (service?.key === 'sip' && 'SIP investment planning Mumbai') ||
+    (service?.key === 'trading-services' && 'Trading and demat services Mumbai') ||
+    (service?.key === 'fixed-deposits' && 'Fixed deposit investment options Mumbai') ||
+    '';
   const premiumObjectPosition = imagePresentation?.objectPosition || (isPortfolioManagement ? '50% 50%' : '62% 42%');
   const premiumImageClassName = `mutual-bg-image${isPortfolioManagement ? ' mutual-bg-image--pms' : ''}`;
   const defaultCardSizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
@@ -134,7 +142,7 @@ export default function ServiceCard({ service, index = 0 }) {
             >
               <Image
                 src={service.image}
-                alt=""
+                alt={premiumServiceImageAlt}
                 fill
                 quality={typeof imagePresentation?.quality === 'number' ? imagePresentation.quality : 90}
                 className={premiumImageClassName}

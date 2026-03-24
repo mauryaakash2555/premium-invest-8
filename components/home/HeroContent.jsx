@@ -44,54 +44,56 @@ export default function HeroContent() {
 
       {/* MAIN HEADLINE */}
       <div className="mb-8 md:mb-10 max-w-5xl">
-        {/* Line 1 */}
-        <div className="overflow-hidden">
-          <motion.h1
-            initial={{ y: "130%", rotateX: -20 }}
-            animate={{ y: 0, rotateX: 0 }}
-            transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="font-serif text-[7.4vw] md:text-[5.0vw] lg:text-[3.7vw] font-light leading-[0.95] tracking-[-0.03em]"
-            style={{ color: "oklch(0.95 0.01 85)" }}
-          >
-            Architect Your
-          </motion.h1>
-        </div>
-
-        {/* Line 2 */}
-        <div className="overflow-hidden">
-          <motion.h1
-            initial={{ y: "130%", rotateX: -20 }}
-            animate={{ y: 0, rotateX: 0 }}
-            transition={{ duration: 1.4, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
-            className="font-serif text-[7.4vw] md:text-[5.0vw] lg:text-[3.7vw] font-extralight italic leading-[0.95] tracking-[-0.03em]"
-            style={{ color: "oklch(0.95 0.01 85 / 0.70)" }}
-          >
-            Financial
-          </motion.h1>
-        </div>
-
-        {/* Line 3 */}
-        <div className="overflow-hidden min-h-[1.2em] pb-[0.1em]">
-          <AnimatePresence mode="wait">
-            <motion.h1
-              key={cyclingWords[wordIndex]}
-              initial={{ y: "115%", opacity: 0, filter: "blur(10px)" }}
-              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-              exit={{ y: "-115%", opacity: 0, filter: "blur(10px)" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="font-serif text-[7.4vw] md:text-[5.0vw] lg:text-[3.7vw] font-light leading-[1.02] tracking-[-0.03em]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, var(--lux-accent), color-mix(in oklab, var(--lux-accent) 55%, white), var(--lux-accent))",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
+        <motion.h1 className="font-serif font-light leading-[0.95] tracking-[-0.03em]">
+          {/* Line 1 */}
+          <div className="overflow-hidden">
+            <motion.span
+              initial={{ y: "130%", rotateX: -20 }}
+              animate={{ y: 0, rotateX: 0 }}
+              transition={{ duration: 1.4, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="block font-serif text-[7.4vw] md:text-[5.0vw] lg:text-[3.7vw] font-light leading-[0.95] tracking-[-0.03em]"
+              style={{ color: "oklch(0.95 0.01 85)" }}
             >
-              {cyclingWords[wordIndex]}
-            </motion.h1>
-          </AnimatePresence>
-        </div>
+              Architect Your
+            </motion.span>
+          </div>
+
+          {/* Line 2 */}
+          <div className="overflow-hidden">
+            <motion.span
+              initial={{ y: "130%", rotateX: -20 }}
+              animate={{ y: 0, rotateX: 0 }}
+              transition={{ duration: 1.4, delay: 0.75, ease: [0.16, 1, 0.3, 1] }}
+              className="block font-serif text-[7.4vw] md:text-[5.0vw] lg:text-[3.7vw] font-extralight italic leading-[0.95] tracking-[-0.03em]"
+              style={{ color: "oklch(0.95 0.01 85 / 0.70)" }}
+            >
+              Financial
+            </motion.span>
+          </div>
+
+          {/* Line 3 */}
+          <div className="overflow-hidden min-h-[1.2em] pb-[0.1em]">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={cyclingWords[wordIndex]}
+                initial={{ y: "115%", opacity: 0, filter: "blur(10px)" }}
+                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                exit={{ y: "-115%", opacity: 0, filter: "blur(10px)" }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="block font-serif text-[7.4vw] md:text-[5.0vw] lg:text-[3.7vw] font-light leading-[1.02] tracking-[-0.03em]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to right, var(--lux-accent), color-mix(in oklab, var(--lux-accent) 55%, white), var(--lux-accent))",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {cyclingWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+        </motion.h1>
       </div>
 
       {/* DESCRIPTION */}
