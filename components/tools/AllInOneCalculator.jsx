@@ -331,7 +331,7 @@ const getInterpretation = (calcKey, result, inputs) => {
         : null,
     }),
     fd: () => ({
-      text: `A fixed deposit of ${fmt(result?.principal || 0)} at ${result?.rate || 0}% interest rate for ${result?.years || 0} years earns guaranteed returns. Interest payout depends on compounding frequency.`,
+      text: `A fixed deposit of ${fmt(result?.principal || 0)} at ${result?.rate || 0}% interest rate for ${result?.years || 0} years earns fixed/assured returns. Interest payout depends on compounding frequency.`,
       decisionGap: result?.maturityAmount && result?.principal
         ? `Interest earned: ${fmt(result.maturityAmount - result.principal)}`
         : null,

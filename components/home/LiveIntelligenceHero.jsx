@@ -114,7 +114,7 @@ function getDefaultItems() {
       id: "fd_1",
       category: "FD / RD / Bonds",
       urgency: "normal",
-      text: "Large banks tweak FD rates — small changes impact risk-free return comparisons",
+      text: "Large banks tweak FD rates — small changes impact comparative return analysis",
     },
     {
       id: "pms_1",

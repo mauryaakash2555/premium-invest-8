@@ -2918,6 +2918,72 @@ export const staticBlogPost7 = {
     </div>
   </div>
 
+  <div style="margin: 70px 0;">
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 36px; color: var(--lux-accent); margin-bottom: 25px;">
+      ELSS vs PPF vs NPS — Quick Comparison Table
+    </h2>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 18px; color: #E5E5E5;">
+      The tax deduction under Section 80C may look identical on paper, but the product structure is completely different. Use this table as a one-glance summary before you decide where the next ₹1.5 lakh goes.
+    </p>
+
+    <div style="overflow-x: auto; border: 1px solid color-mix(in oklab, var(--lux-accent) 22%, transparent); border-radius: 12px; background: rgba(255,255,255,0.02); margin: 0 0 22px;">
+      <table style="width: 100%; border-collapse: collapse; min-width: 860px;">
+        <thead>
+          <tr>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">Feature</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">ELSS</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">PPF</th>
+            <th style="text-align: left; padding: 14px 16px; font-size: 14px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(229,229,229,0.75); border-bottom: 1px solid color-mix(in oklab, var(--lux-accent) 18%, transparent);">NPS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Underlying risk</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Equity market-linked</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Government-backed scheme with rate revisions</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Market-linked (equity + debt mix)</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Lock-in / liquidity</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">3 years (then fully liquid)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">15 years (partial withdrawals after year 7)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Till 60 (partial withdrawals for specific needs)</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">80C benefit</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Yes (up to ₹1.5L combined)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Yes (up to ₹1.5L combined)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Yes (employee/self contribution under 80C)
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Extra deduction</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">No</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">No</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">Yes (additional ₹50k under 80CCD(1B))</td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5; border-bottom: 1px solid rgba(255,255,255,0.06);">Tax on maturity</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">LTCG rules apply beyond threshold</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">EEE (tax-free maturity)</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85); border-bottom: 1px solid rgba(255,255,255,0.06);">60% tax-free, 40% annuity (taxable)
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 14px 16px; font-size: 16px; color: #E5E5E5;">Best suited for</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Long horizon wealth creation + tax saving</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Capital protection + long-term debt allocation</td>
+            <td style="padding: 14px 16px; font-size: 16px; color: rgba(229,229,229,0.85);">Disciplined retirement focus + extra deduction</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size: 16px; line-height: 1.9; margin-bottom: 0; color: rgba(229,229,229,0.70); font-style: italic;">
+      Note: Returns and tax rules change over time. This table is a decision framework, not a prediction of future performance.
+    </p>
+  </div>
+
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
 
   <div style="margin-bottom: 70px;">
@@ -3321,6 +3387,30 @@ export const staticBlogPost8 = {
     <p style="font-size: 19px; line-height: 2; margin-bottom: 20px; padding-left: 16px; border-left: 3px solid color-mix(in oklab, var(--lux-accent) 70%, transparent); color: var(--lux-accent); font-weight: 500;">
       Gap: ₹37,000 per month. ₹4.4 lakh per year. Where does this come from?
     </p>
+  </div>
+
+  <div style="margin-bottom: 70px;">
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: var(--lux-accent); margin-bottom: 22px;">
+      A Real Rupee Scenario (Inflation Makes the Gap Bigger)
+    </h3>
+    <p style="font-size: 18px; line-height: 2; margin-bottom: 20px; color: #E5E5E5;">
+      Many people do a one-time withdrawal calculation and stop there. The real problem is that your monthly expenses rarely stay flat. Even if you live in the same home in Mumbai, costs rise every year.
+    </p>
+
+    <div style="background: rgba(255, 255, 255, 0.03); padding: 28px; border-radius: 12px; border: 1px solid color-mix(in oklab, var(--lux-accent) 20%, transparent); margin-bottom: 22px;">
+      <p style="font-size: 18px; line-height: 2; margin: 0 0 14px; color: #E5E5E5;">
+        <strong style="color: var(--lux-accent);">Scenario:</strong> Current expenses ₹95,000/month. Assume 6% inflation (illustrative).
+      </p>
+      <ul style="margin: 0 0 14px 18px; padding: 0; font-size: 18px; line-height: 2; color: #E5E5E5;">
+        <li>After 10 years: ₹95,000 × (1.06)<sup>10</sup> ≈ ₹1,70,000/month (rounded)</li>
+        <li>₹58,000/month withdrawal (from ₹1 crore) covers part of today’s expenses, but the shortfall increases as costs rise</li>
+        <li>If you want to fund ₹95,000/month sustainably using a ~6% withdrawal approach: ₹95,000 × 12 = ₹11.4L/year → ₹11.4L ÷ 0.06 ≈ ₹1.9 crore</li>
+        <li>For a more comfortable ₹1.2L/month lifestyle, the math quickly moves to ₹2.4 crore+ (before adding buffers for healthcare shocks)</li>
+      </ul>
+      <p style="font-size: 16px; line-height: 1.9; margin: 0; color: rgba(229,229,229,0.75); font-style: italic;">
+        This is not a forecast. It’s a planning lens to show why “₹1 crore sounds huge” can still translate into a tight monthly reality in a high-cost city.
+      </p>
+    </div>
   </div>
 
   <hr style="border: none; border-top: 1px solid color-mix(in oklab, var(--lux-accent) 30%, transparent); margin: 70px 0;" />
