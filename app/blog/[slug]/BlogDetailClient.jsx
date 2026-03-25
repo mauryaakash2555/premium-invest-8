@@ -876,6 +876,16 @@ export default function BlogDetailClient({ slug, initialPost = null }) {
             <User size={16} />
             {post.author || 'BM Wealth Editorial Team'}
           </div>
+          {(post.author === 'Brahmdeo Maurya' || post.author === 'brahmdeo maurya') && (
+            <div style={{
+              fontSize: '12px',
+              color: 'var(--lux-foreground-60)',
+              opacity: 0.75,
+              marginTop: '-2px',
+            }}>
+              AMFI ARN 90008 | PMS Cert. 2430447816 | IRDAI 277925 | 35+ years experience in wealth management
+            </div>
+          )}
           {/* Read time is shown under title for consistency */}
         </div>
 

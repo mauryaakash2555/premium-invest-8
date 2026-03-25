@@ -203,6 +203,54 @@ export default function ExecutionPartnersPage() {
         </div>
       </section>
 
+      {/* Educational Content Section */}
+      <section style={{ padding: '0 0 20px', width: '100%' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px' }}>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Regulatory Framework
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Every execution partner listed on this page operates under Indian financial regulations. Credit card issuers are RBI-regulated scheduled commercial banks that follow the Master Direction on Credit Card and Debit Card — Issuance and Conduct (updated 2022). Personal loan providers are either licensed NBFCs or banking institutions governed by the RBI&apos;s Fair Practices Code and Digital Lending Guidelines (September 2022).
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              BM Wealth verifies the regulatory registration of every partner before listing. For banks, we check the RBI&apos;s Second Schedule list. For NBFCs, we verify against the RBI&apos;s NBFC registry. We do not list unregistered lenders, digital-only lending apps without an NBFC licence, or entities under material regulatory action.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Fee Transparency
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              We believe execution costs are one of the most under-discussed aspects of personal finance. Credit card fees typically include joining fees (₹0–₹10,000), annual renewal fees, late payment charges, over-limit fees, foreign currency markup (1.5%–3.5%), and cash advance charges. Personal loan costs include processing fees (1%–3%), prepayment penalties (0%–5%), insurance premium bundling, documentation charges, and the interest rate itself.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              When you click through to an execution partner, read the Most Important Terms and Conditions (MITC) document carefully. The headline rate or reward is only one component of total cost. BM Wealth does not set, negotiate, or influence partner pricing — our role is limited to directing you to the partner&apos;s official application channel.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              How Execution Works
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Each &ldquo;Apply Now&rdquo; or &ldquo;Check Eligibility&rdquo; button redirects you to the partner&apos;s official website or application portal. The entire application, KYC verification, credit assessment, approval, and disbursal happen on the partner&apos;s platform under their regulatory obligations. BM Wealth has no access to your application data, credit bureau checks, or approval decisions.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              If you face any issues during the application process or have questions about terms, the partner&apos;s customer support is the primary channel. As part of our advisory relationship, BM Wealth clients can escalate partner-related issues through our team, and we will assist with resolution where possible.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', padding: '18px 20px' }}>
+            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)', lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: 'rgba(255,255,255,0.60)' }}>Disclaimer:</strong> This page is for informational and educational purposes only and does not constitute financial advice. All partner products are subject to the partner&apos;s terms, eligibility criteria, and regulatory obligations. BM Wealth may receive a referral fee at no additional cost to you. AMFI ARN 90008 | PMS Cert. 2430447816 | IRDAI 277925
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Cards */}
       <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
         <SectionHeading id="credit-cards">Credit Cards</SectionHeading>

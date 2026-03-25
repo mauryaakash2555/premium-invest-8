@@ -153,6 +153,59 @@ export default function CuratedPartners() {
         </div>
       </section>
 
+      {/* Educational Content */}
+      <section style={{ padding: '0 0 28px', width: '100%' }}>
+        <div style={{ maxWidth: 980, margin: '0 auto', padding: '0 20px' }}>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              What Makes a Partner &ldquo;Curated&rdquo;
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              A curated partner is not simply a company that pays for placement. Curation means the entity has passed our internal review on four dimensions: regulatory standing (active SEBI/RBI/IRDAI registration with no material enforcement actions), pricing transparency (clear fee disclosure with no hidden charges), client servicing record (demonstrated ability to handle investor queries and complaints within stated SLAs), and strategic fit (the partner&apos;s product fills a genuine gap in our clients&apos; wealth management execution path).
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              Partners that fall below any of these thresholds during periodic reviews are removed from the curated list. Paid placements are marked explicitly — when a partner pays for a featured position, we disclose it on the listing.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Due Diligence Process
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Before any partner appears on this page, we complete a structured due diligence checklist. This includes: verification of the entity&apos;s regulatory licence from official registries (SEBI portal, RBI list, IRDAI intermediary register), review of publicly available complaint data and regulatory orders, assessment of the partner&apos;s onboarding and account opening process for friction and transparency, and a fee structure comparison against market benchmarks.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              This process is not a one-time gate. We re-evaluate existing partnerships at least annually or whenever material regulatory or operational changes are reported. If we learn of undisclosed fees, service degradation, or regulatory non-compliance, the partner is placed under review and may be suspended from the listing.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              How Clients Benefit From Curated Listings
+            </h2>
+            <ul style={{ paddingLeft: '20px', margin: 0, listStyle: 'disc' }}>
+              {[
+                'Reduced research overhead — you start from a pre-vetted shortlist instead of evaluating dozens of platforms.',
+                'Confidence in regulatory standing — only entities with active, verified licences appear here.',
+                'Clear fee context — we highlight pricing structures so you can compare apples to apples.',
+                'Advisory integration — curated partners are selected to fit within BM Wealth\u2019s planning workflow, making execution seamless after advisory.',
+                'Transparent sponsorship disclosure — if a placement is paid, it is clearly marked.',
+              ].map((item, i) => (
+                <li key={i} style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, marginBottom: '8px' }}>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', padding: '18px 20px' }}>
+            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)', lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: 'rgba(255,255,255,0.60)' }}>Disclaimer:</strong> Curated partner listings are for informational purposes only and do not constitute financial advice or endorsement. BM Wealth may receive compensation from featured partners. All partner products are subject to their own terms, risks, and regulatory obligations. AMFI ARN 90008 | PMS Cert. 2430447816 | IRDAI 277925
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Partner Cards Section */}
       <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
         

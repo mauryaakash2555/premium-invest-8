@@ -147,6 +147,20 @@ export default function CommunityPostDetailClient({ id }) {
 
         {post ? (
           <>
+            {/* Editorial disclaimer for community submissions */}
+            <div style={{
+              padding: '12px 16px',
+              marginTop: '14px',
+              marginBottom: '14px',
+              border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(255,255,255,0.03)',
+              fontSize: '13px',
+              color: 'rgba(235,242,255,0.72)',
+              lineHeight: 1.6,
+            }}>
+              This is a community submission. Views expressed are those of the community member and do not constitute financial advice.
+            </div>
+
             {post.sponsored_by ? (
               <div style={{ marginTop: '14px', marginBottom: '12px' }}>
                 <span

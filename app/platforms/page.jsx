@@ -156,7 +156,82 @@ export default function Platforms() {
             </p>
           </div>
         </div>
-        
+
+        {/* Platform Comparison & Investor Guide */}
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px 28px' }}>
+          <div
+            style={{
+              padding: '28px 24px',
+              border: '1px solid rgba(255,255,255,0.10)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 700, color: 'var(--lux-accent)', letterSpacing: '0.6px', fontFamily: '"Playfair Display", serif' }}>
+              Comparing Investment Platforms in India (2025–2026)
+            </h2>
+            <p style={{ margin: '12px 0 0 0', fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.8 }}>
+              Full-service brokers, discount platforms, and specialised thematic apps each serve a different investing need.
+              Full-service houses like ICICI Direct and HDFC Securities bundle advisory, research, and relationship management
+              into higher brokerage. Discount brokers such as Zerodha and Groww drastically cut per-order costs but provide
+              limited hand-holding. Thematic platforms like Smallcase sit in between: you get curated baskets of stocks or
+              ETFs designed by SEBI-registered advisors, with automated rebalancing but no personalised wealth plan.
+            </p>
+            <p style={{ margin: '12px 0 0 0', fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.8 }}>
+              Before committing, compare annual maintenance charges (AMC), mutual-fund transaction fees, derivative lot
+              costs, and the quality of tax-ready statements each platform generates. A ₹20-per-order brokerage is
+              meaningless if the statement export forces you to spend hours reconciling capital gains at ITR time.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px 28px' }}>
+          <div
+            style={{
+              padding: '28px 24px',
+              border: '1px solid rgba(255,255,255,0.10)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 700, color: 'var(--lux-accent)', letterSpacing: '0.6px', fontFamily: '"Playfair Display", serif' }}>
+              Which Platform Suits Which Investor?
+            </h2>
+            <ul style={{ margin: '14px 0 0 0', padding: '0 0 0 20px', fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 2 }}>
+              <li><strong style={{ color: 'rgba(255,255,255,0.92)' }}>Beginners &amp; SIP-only investors:</strong> Groww — minimal interface, zero-friction SIP setup, built-in goal tracking. Ideal if you plan to start with ₹500–₹5,000 monthly SIPs in index funds.</li>
+              <li><strong style={{ color: 'rgba(255,255,255,0.92)' }}>Active traders &amp; derivatives users:</strong> Zerodha — Kite&apos;s charting, order-slicing, and margin calculator are industry-leading among discount brokers.</li>
+              <li><strong style={{ color: 'rgba(255,255,255,0.92)' }}>Thematic &amp; basket investors:</strong> Smallcase — curated portfolios with transparent methodology, one-click rebalancing, and research-backed allocation.</li>
+              <li><strong style={{ color: 'rgba(255,255,255,0.92)' }}>High-net-worth &amp; advisory clients:</strong> A SEBI-registered advisor (like BM Wealth) who then executes through an appropriate broker. Platform choice becomes secondary when strategy is customised to your goals.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px 28px' }}>
+          <div
+            style={{
+              padding: '28px 24px',
+              border: '1px solid rgba(255,255,255,0.10)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))',
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 700, color: 'var(--lux-accent)', letterSpacing: '0.6px', fontFamily: '"Playfair Display", serif' }}>
+              Key Features to Evaluate
+            </h2>
+            <p style={{ margin: '12px 0 0 0', fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.8 }}>
+              When shortlisting a platform, assess these dimensions: <strong style={{ color: 'rgba(255,255,255,0.90)' }}>Cost structure</strong> (brokerage, AMC, fund charges),
+              <strong style={{ color: 'rgba(255,255,255,0.90)' }}> Product breadth</strong> (equities, mutual funds, ETFs, bonds, IPOs, NPS),
+              <strong style={{ color: 'rgba(255,255,255,0.90)' }}> Reporting quality</strong> (tax statements, realised/unrealised P&amp;L, XIRR tracking),
+              <strong style={{ color: 'rgba(255,255,255,0.90)' }}> Mobile experience</strong> (order speed, biometric login, push alerts), and
+              <strong style={{ color: 'rgba(255,255,255,0.90)' }}> Customer support</strong> (response time for trade-related queries, dispute resolution).
+              No single platform leads in every category — the right choice depends on your portfolio size, trading frequency, and product mix.
+            </p>
+          </div>
+        </div>
+
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px 28px' }}>
+          <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, maxWidth: '900px', marginLeft: 'auto', marginRight: 'auto' }}>
+            <strong style={{ color: 'color-mix(in oklab, var(--lux-accent) 60%, rgba(255,255,255,0.55))' }}>Disclaimer:</strong> Platform descriptions are for informational purposes only and do not constitute an endorsement or recommendation. Verify all details, fees, and regulatory status directly with the platform before opening an account. Past performance or popularity does not guarantee suitability.
+          </p>
+        </div>
+
         {/* POSITION #1 - DIAMOND PARTNER (COMPETITIVE BIDDING) */}
         <MobileScrollBoost className="platform-card diamond-bidding" holdMs={5000}>
           <div className="platform-content">

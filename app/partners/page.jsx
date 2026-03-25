@@ -154,8 +154,70 @@ export default function PartnersPage() {
         </div>
       </section>
 
+      {/* Educational Content */}
+      <section style={{ padding: '0 0 40px', width: '100%' }}>
+        <div style={{ maxWidth: 980, margin: '0 auto', padding: '0 20px' }}>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Who BM Wealth Partners With
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              BM Wealth is an AMFI-registered mutual fund distributor (ARN 90008) and IRDAI-licensed insurance corporate agent (License 277925) based in Mumbai. Our partners include RBI-regulated banks for credit cards and personal loans, SEBI-registered brokers and platforms for equity and mutual fund execution, IRDA-licensed insurers for term and health cover, and select fintech platforms that complement our advisory framework.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              Every partnership is evaluated against the same question: does this give our client a measurably better execution path than going alone? If the answer is no, we do not list them. We do not partner with unregulated entities, and we do not accept partnerships that create conflicts of interest with our advisory obligations.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              How Partners Are Selected
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Our selection process is structured, not transactional. We verify regulatory registration (SEBI, RBI, IRDAI as applicable), review grievance redressal records, evaluate pricing transparency, and test the end-to-end onboarding and servicing experience before listing any partner. Partners that charge hidden fees, have opaque terms, or fall below service thresholds are removed.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              We periodically re-evaluate existing partnerships based on client feedback, regulatory developments, and competitive landscape changes. The goal is to maintain a lean, high-quality roster rather than an exhaustive directory.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Regulatory Compliance
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              All execution partners listed on this site operate under relevant Indian regulatory frameworks — RBI for banking and lending, SEBI for broking and investment advisory, IRDAI for insurance distribution, and AMFI for mutual fund distribution. BM Wealth does not process transactions, hold client funds, or make approvals on behalf of any partner. When you click through to a partner, you interact directly with their platform under their regulatory obligations. We may receive a referral fee at no additional cost to you, and this is always disclosed.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '22px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              How Clients Benefit
+            </h2>
+            <ul style={{ paddingLeft: '20px', margin: 0, listStyle: 'disc' }}>
+              {[
+                'Pre-vetted partners: Instead of evaluating dozens of platforms yourself, you start from a reviewed shortlist.',
+                'Transparent fee disclosure: Every partner listing discloses whether the link is sponsored or tracked.',
+                'Regulatory assurance: Only regulated entities appear on our platform \u2014 no grey-market operators.',
+                'Advisory alignment: Partners are selected to complement BM Wealth\u2019s planning workflow, not replace it.',
+                'Single point of escalation: If you face issues with any partner, our team assists with resolution as part of our advisory relationship.',
+              ].map((item, i) => (
+                <li key={i} style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, marginBottom: '8px' }}>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', padding: '18px 20px' }}>
+            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)', lineHeight: 1.7, margin: 0 }}>
+              <strong style={{ color: 'rgba(255,255,255,0.60)' }}>Disclaimer:</strong> Partner listings are for informational and educational purposes only. BM Wealth does not guarantee the performance, availability, or suitability of any partner product. Always conduct your own due diligence before engaging with any financial service provider. AMFI ARN 90008 | PMS Cert. 2430447816 | IRDAI 277925
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Options */}
-      <section style={{ padding: '40px 0 90px', width: '100%' }}>
+      <section style={{ padding: '0 0 90px', width: '100%' }}>
         <div style={{ maxWidth: 980, margin: '0 auto', padding: '0 20px' }}>
           <div style={{ display: 'grid', gap: 18 }}>
             {PARTNER_OPTIONS.map((opt) => (

@@ -357,6 +357,11 @@ export default function HomePageClient() {
 
   return (
     <div>
+      {/* SEO: Server-visible H1 (HeroContent is ssr:false) */}
+      <h1 style={{position:'absolute',width:'1px',height:'1px',overflow:'hidden',clip:'rect(0,0,0,0)',whiteSpace:'nowrap'}}>
+        BM Wealth — Portfolio Management and Investment Advisory Mumbai
+      </h1>
+
       {/* Hero Section */}
       <section
         className="hero-gradient hero-section-responsive"

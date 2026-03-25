@@ -81,8 +81,67 @@ export default function BestCreditCardsIndiaPage() {
         </div>
       </section>
 
+      {/* Educational Content Section */}
+      <section className="bp-body" style={{ padding: '40px 0 0', width: '100%' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 20px' }}>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '28px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              How to Choose the Best Credit Card
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Choosing a credit card is not about picking the one with the flashiest branding — it is about aligning the card&apos;s fee structure, reward mechanics, and credit limit with your actual spending patterns. A card that rewards dining and travel is pointless if 80% of your spend is on fuel and groceries. Start by listing your top three spending categories and find cards that reward those categories disproportionately.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              Beyond rewards, evaluate the annual fee relative to the value you will extract. A ₹5,000 annual fee card that returns ₹12,000 in lounge access, fuel surcharge waivers, and accelerated points is a net positive. A ₹500 fee card with negligible benefits may cost you more in missed opportunities. Always calculate the effective return rate on spend before committing.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '28px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Understanding Reward Points
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Reward points are earned on eligible transactions and can be redeemed for cashback, air miles, merchandise, or statement credits. The value per point varies widely — some banks offer 0.25 paise per point while premium cards offer 1.00+ paise per point. The key metric is <strong style={{ color: 'rgba(255,255,255,0.92)' }}>reward rate</strong>: (point value × points earned per ₹100 spent) ÷ 100.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              Watch out for reward point expiry, capped monthly earning limits, and category exclusions (fuel, utility, government payments are commonly excluded). Always check the card&apos;s Most Important Terms and Conditions (MITC) document for the precise earning and redemption rules.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '28px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Annual Fee vs Cashback — What Really Matters
+            </h2>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: '0 0 14px' }}>
+              Lifetime free credit cards (LTF) have no annual fee and work well for low-to-moderate spenders (under ₹5 lakh/year). Annual fee cards start making sense when the combined reward value, complimentary lounge visits, golf access, insurance covers, and milestone benefits exceed the fee by a comfortable margin.
+            </p>
+            <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, margin: 0 }}>
+              Cashback cards give a flat percentage back (1%–5% on select categories). Reward-point cards offer potentially higher returns but require active redemption. Frequent travellers may prefer air miles cards, while everyday spenders often do better with simple cashback.
+            </p>
+          </div>
+
+          <div style={{ border: '1px solid rgba(255,255,255,0.10)', background: 'linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015))', padding: '28px 24px', marginBottom: '28px' }}>
+            <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 14px', letterSpacing: '1px' }}>
+              Eligibility for Credit Cards in India
+            </h2>
+            <ul style={{ paddingLeft: '20px', margin: 0, listStyle: 'disc' }}>
+              {[
+                'Age: 21–60 years (primary cardholder). Some banks allow 18+ for add-on cards.',
+                'Income: Minimum ₹2.5–₹4 lakh annual income for entry-level cards; ₹12 lakh+ for premium cards.',
+                'Credit score: 750+ on CIBIL for best approval odds. Some banks approve at 700+ with income proof.',
+                'Employment: Salaried or self-employed with verifiable income. NRIs are eligible through select banks.',
+                'Existing relationship: Having a savings or salary account with the issuing bank often improves approval chances and credit limits.',
+              ].map((item, i) => (
+                <li key={i} style={{ fontSize: '15px', color: 'rgba(255,255,255,0.78)', lineHeight: 1.85, marginBottom: '8px' }}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Cards Section */}
-      <section className="bp-body" style={{ padding: '40px 0 100px', width: '100%' }}>
+      <section className="bp-body" style={{ padding: '20px 0 40px', width: '100%' }}>
         <MobileScrollBoost className="platform-card" holdMs={4500}>
           <div className="platform-content">
             <div style={{ fontSize: '20px', fontWeight: 700, color: 'rgba(255,255,255,0.62)', letterSpacing: '2px', marginBottom: '10px' }}>#1</div>
@@ -188,6 +247,36 @@ export default function BestCreditCardsIndiaPage() {
         <div style={{ textAlign: 'center', padding: '40px 20px 0' }}>
           <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.4)', lineHeight: 1.6, maxWidth: '800px', margin: '0 auto' }}>
             Educational shortlist. Final application happens on official bank channels.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section style={{ padding: '0 20px 40px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '22px', fontFamily: '"Playfair Display", serif', color: 'var(--lux-accent)', fontWeight: 600, margin: '0 0 20px', letterSpacing: '1px' }}>
+            Frequently Asked Questions
+          </h2>
+          {[
+            { q: 'What is the ideal number of credit cards to hold?', a: 'Most financial advisors recommend 2\u20133 cards that cover your main spending categories without overlapping benefits. Too many cards increase the risk of missed payments and make tracking expenses harder.' },
+            { q: 'How does credit utilization ratio affect my score?', a: 'Credit utilization is the percentage of your total available credit that you are using at any time. Keeping it below 30% is good; below 10% is excellent. High utilization signals risk to credit bureaus and can lower your score.' },
+            { q: 'Should I convert large purchases to EMI?', a: 'EMI conversions make sense when the interest rate offered is lower than what you would earn by keeping cash invested. Many banks offer 0% or low-interest EMI on partner merchants. Always confirm the processing fee and total cost before converting.' },
+            { q: 'What happens if I miss a credit card payment?', a: 'Missing a payment results in late fees (up to ₹1,300 on some cards), interest charges on the outstanding balance (typically 3.5% per month or 42% per annum), and a negative mark on your credit report. Set up auto-pay for at least the minimum due to avoid this.' },
+            { q: 'Are co-branded credit cards worth it?', a: 'Co-branded cards offer higher rewards on purchases with the partner brand (airline, hotel, retailer). They are worth it if you are already a loyal customer of that brand. Otherwise, a general-purpose rewards card with flexible redemption typically delivers better value.' },
+          ].map((faq, i) => (
+            <details key={i} style={{ marginBottom: '12px', border: '1px solid rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.02)', padding: '14px 18px' }}>
+              <summary style={{ fontSize: '15px', color: 'rgba(255,255,255,0.90)', fontWeight: 600, cursor: 'pointer', lineHeight: 1.5 }}>{faq.q}</summary>
+              <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.70)', lineHeight: 1.85, margin: '10px 0 0' }}>{faq.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* Disclaimer */}
+      <section style={{ padding: '0 20px 60px' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', padding: '18px 20px' }}>
+          <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.45)', lineHeight: 1.7, margin: 0 }}>
+            <strong style={{ color: 'rgba(255,255,255,0.60)' }}>Disclaimer:</strong> This page is for educational purposes only and does not constitute financial advice. Credit card features, fees, and eligibility criteria are indicative and subject to change by the issuing bank. BM Wealth does not process credit card applications or make approval decisions. Always review the official MITC document on the bank&apos;s website before applying. AMFI ARN 90008 | IRDAI 277925
           </p>
         </div>
       </section>
