@@ -109,7 +109,7 @@ export async function GET(req) {
   // Try selecting lead_score if present; if schema doesn't have it, fall back.
   let res;
   try {
-    res = await withTimeout(baseQuery().select("id,name,email,phone,interest,source,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
+    res = await withTimeout(baseQuery().select("id,name,email,phone,interest,source,status,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
   } catch (e) {
     const msg = String(e?.message || "failed");
     const status = msg === "timeout" ? 504 : 502;
@@ -119,7 +119,7 @@ export async function GET(req) {
   if (res?.error && isMissingColumnError(res.error, 'lead_score')) {
     // Retry without lead_score for backwards compatible schemas.
     try {
-      res = await withTimeout(baseQuery().select("id,name,email,phone,created_at"), SUPABASE_TIMEOUT_MS);
+      res = await withTimeout(baseQuery().select("id,name,email,phone,interest,source,status,created_at"), SUPABASE_TIMEOUT_MS);
     } catch (e) {
       const msg = String(e?.message || "failed");
       const status = msg === "timeout" ? 504 : 502;
