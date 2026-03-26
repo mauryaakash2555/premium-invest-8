@@ -362,12 +362,7 @@ export default function AboutUsPage() {
                 key={faq.question}
                 className="border border-[color:var(--lux-foreground-10)] bg-[color:var(--lux-card)]/60 backdrop-blur-xl p-9 md:p-10"
               >
-                <div className="flex items-center gap-4">
-                  <div className="h-11 w-11 flex items-center justify-center rounded-full border border-[color:var(--lux-foreground-10)] text-[color:var(--lux-accent)]">
-                    {index % 2 === 0 ? <Target className="h-5 w-5" strokeWidth={1.5} /> : <Sparkles className="h-5 w-5" strokeWidth={1.5} />}
-                  </div>
-                  <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-foreground-60)]">0{index + 1}</div>
-                </div>
+                <div className="text-[10px] tracking-[0.5em] uppercase font-semibold text-[color:var(--lux-accent)]">0{index + 1}</div>
                 <div className={`${cormorant.className} mt-6 text-2xl font-medium text-[color:var(--lux-foreground-80)]`}>
                   {faq.question}
                 </div>

@@ -240,7 +240,9 @@ const Services = () => {
 
         .lux-cta-ghost > span,
         .lux-cta-ghost > svg {
-          color: oklch(0.95 0.01 85 / 0.88);
+          color: oklch(0.06 0.005 280);
+          position: relative;
+          z-index: 2;
         }
         .lux-cta-primary > span,
         .lux-cta-primary > svg {
@@ -269,30 +271,46 @@ const Services = () => {
           transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Luxury CTA - Ghost (border only) */
+        /* Luxury CTA - Ghost (now matches primary: cream bg + gold sweep) */
         .lux-cta-ghost {
+          position: relative;
+          overflow: hidden;
+          z-index: 0;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           gap: 12px;
           padding: 16px 32px;
-          background: oklch(0.95 0.01 85 / 0.04);
-          color: oklch(0.95 0.01 85 / 0.85);
+          background: oklch(0.95 0.01 85);
+          color: oklch(0.06 0.005 280);
           font-family: 'Inter', system-ui, sans-serif;
           font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.18em;
+          font-weight: 600;
+          letter-spacing: 0.2em;
           text-transform: uppercase;
           text-decoration: none;
-          border: 1px solid oklch(0.95 0.01 85 / 0.12);
+          border: 1px solid rgba(255,255,255,0.14);
           border-radius: 0;
           cursor: pointer;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+          box-shadow: 0 16px 60px rgba(0,0,0,0.55);
+        }
+        .lux-cta-ghost::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: oklch(0.78 0.08 65);
+          transform: translateX(-101%);
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          z-index: 1;
         }
         .lux-cta-ghost:hover {
-          background: oklch(0.78 0.08 65);
-          border-color: oklch(0.78 0.08 65);
-          color: oklch(0.06 0.005 280);
+          transform: translateY(-2px);
+          box-shadow: 0 22px 90px rgba(0,0,0,0.68);
+          filter: brightness(1.02);
+        }
+        .lux-cta-ghost:hover::before {
+          transform: translateX(0);
         }
         .lux-cta-ghost svg {
           transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
