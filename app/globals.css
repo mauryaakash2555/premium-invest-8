@@ -1078,37 +1078,61 @@ a.bm-cta-gold-flat:focus-visible {
     100% { transform: translate(200px, -400px) rotate(180deg); opacity: 0; }
   }
 
-  /* Legacy CTA block intentionally overridden by CTA System above */
+  /* Secondary CTAs: same premium ivory+gold sweep as primary */
 
   .lux-cta-ghost,
   .btn-secondary {
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     padding: 16px 32px;
-    background: rgba(255,255,255,0.03);
-    color: rgba(255,255,255,0.85);
+    background: oklch(0.95 0.01 85) !important;
+    color: oklch(0.06 0.005 280) !important;
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 0;
+    border: 1px solid rgba(255,255,255,0.14) !important;
+    border-radius: 0 !important;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-    box-shadow: 0 12px 45px rgba(0,0,0,0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    box-shadow: 0 16px 60px rgba(0,0,0,0.55);
+  }
+
+  .lux-cta-ghost::before,
+  .btn-secondary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--lux-accent);
+    transform: translateX(-101%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: -1;
+    pointer-events: none;
   }
 
   .lux-cta-ghost:hover,
   .btn-secondary:hover {
-    background: var(--lux-accent);
-    border-color: var(--lux-accent);
-    color: oklch(0.06 0.005 280);
     transform: translateY(-2px);
-    box-shadow: 0 22px 90px rgba(0,0,0,0.65);
+    box-shadow: 0 22px 90px rgba(0,0,0,0.68);
+    filter: brightness(1.02);
+  }
+
+  .lux-cta-ghost:hover::before,
+  .btn-secondary:hover::before {
+    transform: translateX(0);
+  }
+
+  .lux-cta-ghost:active,
+  .btn-secondary:active {
+    transform: translateY(0);
+    box-shadow: 0 12px 55px rgba(0,0,0,0.55);
   }
 
   .section-container {
@@ -1168,7 +1192,7 @@ a.bm-cta-gold-flat:focus-visible {
 
   .hero-section-responsive .btn-secondary {
     backdrop-filter: blur(10px);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: 0.5px;
   }
 
@@ -2297,17 +2321,39 @@ footer {
 }
 
 .bm-btn-secondary {
-  color: rgba(255,255,255,0.85);
-  background: rgba(255,255,255,0.03);
+  position: relative;
+  overflow: hidden;
+  color: oklch(0.06 0.005 280);
+  background: oklch(0.95 0.01 85);
   border: 1px solid rgba(255,255,255,0.14);
-  box-shadow: 0 12px 45px rgba(0,0,0,0.45);
+  box-shadow: 0 16px 60px rgba(0,0,0,0.55);
+}
+
+.bm-btn-secondary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--lux-accent);
+  transform: translateX(-101%);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.bm-btn-secondary > * {
+  position: relative;
+  z-index: 2;
 }
 
 .bm-btn-secondary:hover {
-  background: var(--lux-accent);
-  border-color: var(--lux-accent);
+  background: oklch(0.95 0.01 85);
+  border-color: rgba(255,255,255,0.14);
   color: oklch(0.06 0.005 280);
   transform: translateY(-2px);
+  box-shadow: 0 22px 90px rgba(0,0,0,0.68);
+}
+
+.bm-btn-secondary:hover::before {
+  transform: translateX(0);
 }
 
 .bm-btn:disabled {
