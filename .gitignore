@@ -93,6 +93,9 @@ PUBLIC_SITE_AUDIT_COMPARISON*.md
 scripts/audit/
 scripts/qa/
 
+# Temporary one-off utility scripts (never commit)
+scripts/expand-blogs*.mjs
+
 # Large binary tools
 .tools/ffmpeg.zip
 .tools/ffmpeg_extract/**
