@@ -128,6 +128,12 @@ export default async function sitemap() {
     "/blog/guest",
     // Legacy redirect-only URL (canonical is the blog post under /blog/)
     "/best-credit-cards-high-income-india",
+    "/blog/bookmap-review-order-flow-trading-india-2026",
+    "/blog/pepperstone-review-forex-broker-india-2026",
+    "/blog/best-wellness-ayurvedic-brands-corporate-gifting-india-2026",
+    "/blog/switcher-studio-review-live-streaming-finance-creators-2026",
+    "/blog/cloudways-vs-hostinger-digitalocean-hosting-indian-finance-blogs-2026",
+    "/blog/oppo-find-n5-review-professional-smartphone-india-2026",
   ]);
 
   const excludedPrefix = [

@@ -1659,6 +1659,7 @@ export const staticBlogPost18 = {
 export const staticBlogPost19 = {
   id: "blog-19",
   isAffiliate: true,
+  noindex: true,
   slug: "bookmap-review-order-flow-trading-india-2026",
   title: "BookMap Review 2026: Is Order Flow Trading Worth ₹50,000/Year for Indian Traders?",
   author: "Brahmdeo Maurya",
@@ -1901,6 +1902,7 @@ export const staticBlogPost19 = {
 export const staticBlogPost20 = {
   id: "blog-20",
   isAffiliate: true,
+  noindex: true,
   slug: "pepperstone-review-forex-broker-india-2026",
   title: "Pepperstone Review 2026: Should Indian Traders Consider a Global Forex Broker?",
   author: "Brahmdeo Maurya",
@@ -2172,6 +2174,7 @@ export const staticBlogPost20 = {
 export const staticBlogPost21 = {
   id: "blog-21",
   isAffiliate: true,
+  noindex: true,
   slug: "best-wellness-ayurvedic-brands-corporate-gifting-india-2026",
   title: "The Best Wellness & Ayurvedic Brands for Corporate Gifting in 2026 — A Mumbai Professional's Guide",
   author: "Brahmdeo Maurya",
@@ -2516,6 +2519,7 @@ export const staticBlogPost21 = {
 export const staticBlogPost22 = {
   id: "blog-22",
   isAffiliate: true,
+  noindex: true,
   slug: "switcher-studio-review-live-streaming-finance-creators-2026",
   title: "Switcher Studio vs OBS vs StreamYard: Which Live Streaming Tool Should Financial Content Creators Use in 2026?",
   author: "Brahmdeo Maurya",
@@ -2766,6 +2770,7 @@ export const staticBlogPost22 = {
 export const staticBlogPost23 = {
   id: "blog-23",
   isAffiliate: true,
+  noindex: true,
   slug: "cloudways-vs-hostinger-digitalocean-hosting-indian-finance-blogs-2026",
   title: "Cloudways vs Hostinger vs DigitalOcean: Best Hosting for Indian Finance Blogs in 2026",
   author: "Brahmdeo Maurya",
@@ -3030,6 +3035,7 @@ export const staticBlogPost23 = {
 export const staticBlogPost24 = {
   id: "blog-24",
   isAffiliate: true,
+  noindex: true,
   slug: "oppo-find-n5-review-professional-smartphone-india-2026",
   title: "OPPO Find N5 Review 2026: Is the Foldable Flagship Worth It for Indian Professionals?",
   author: "Brahmdeo Maurya",
