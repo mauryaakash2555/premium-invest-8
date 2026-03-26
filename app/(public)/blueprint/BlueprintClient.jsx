@@ -233,10 +233,20 @@ export default function BlueprintClient() {
                     <button
                       type="submit"
                       disabled={submitting || !form.name || !form.email || !phoneValid || !form.interest}
-                      className="w-full py-3.5 rounded-lg text-[13px] tracking-[0.12em] uppercase font-semibold transition-opacity duration-300 disabled:opacity-40"
-                      style={{ backgroundColor: "var(--lux-accent)", color: "#000" }}
+                      className="group relative w-full overflow-hidden py-3.5 md:py-4 transition-[color,opacity,transform] duration-500 disabled:opacity-40"
+                      style={{ backgroundColor: "oklch(0.95 0.01 85)", color: "oklch(0.06 0.005 280)" }}
                     >
-                      {submitting ? "Sending…" : "Send Me the Guide"}
+                      <span className="relative z-10 flex items-center justify-center gap-3 font-sans text-[11px] tracking-[0.22em] uppercase font-semibold">
+                        {submitting ? "Sending…" : "Send Me the Guide"}
+                        {!submitting && (
+                          <svg className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        )}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-0 -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-500"
+                        style={{ backgroundColor: "var(--lux-accent)" }}
+                      />
                     </button>
                   </form>
 
