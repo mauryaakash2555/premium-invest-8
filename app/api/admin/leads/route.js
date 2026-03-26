@@ -109,7 +109,7 @@ export async function GET(req) {
   // Try selecting lead_score if present; if schema doesn't have it, fall back.
   let res;
   try {
-    res = await withTimeout(baseQuery().select("id,name,email,phone,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
+    res = await withTimeout(baseQuery().select("id,name,email,phone,interest,source,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
   } catch (e) {
     const msg = String(e?.message || "failed");
     const status = msg === "timeout" ? 504 : 502;

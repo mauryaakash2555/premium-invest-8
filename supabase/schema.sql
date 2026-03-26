@@ -8,9 +8,18 @@ create table if not exists public.leads (
   name text,
   email text unique,
   phone text,
+  interest text,
+  source text,
   lead_score integer default 0,
   created_at timestamp with time zone default now()
 );
+
+-- Add interest/source columns for existing installs (safe to re-run).
+do $$ begin
+  alter table public.leads add column if not exists interest text;
+  alter table public.leads add column if not exists source text;
+exception when others then null;
+end $$;
 
 create table if not exists public.conversations (
   id uuid primary key default gen_random_uuid(),
