@@ -38,7 +38,10 @@ export default function BlueprintClient() {
 
       const json = await res.json().catch(() => ({}));
 
+      const errMsg = String(json.error || "").toLowerCase();
       if (res.ok && json.ok) {
+        setResult({ ok: true, name: form.name.trim().split(" ")[0] || "there" });
+      } else if (errMsg.includes("duplicate") || errMsg.includes("unique")) {
         setResult({ ok: true, name: form.name.trim().split(" ")[0] || "there" });
       } else {
         setResult({ ok: false, error: json.error || "Something went wrong. Please try again or WhatsApp us directly." });
