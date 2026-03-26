@@ -147,7 +147,7 @@ export default function PillarIndexClient({ pillar, initialPosts = null }) {
   const getPostHref = (post) => {
     let base = null;
     if (post?.slug) base = `/blog/${post.slug}`;
-    else if (post?._id) base = `/blog/community/${post._id}`;
+    else if (post?._id || post?.id) base = `/blog/community/${post?._id || post?.id}`;
     else base = '/blog';
 
     if (!fromPath) return base;

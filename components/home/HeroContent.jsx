@@ -44,7 +44,7 @@ export default function HeroContent() {
 
       {/* MAIN HEADLINE */}
       <div className="mb-8 md:mb-10 max-w-5xl">
-        <motion.h1 className="font-serif font-light leading-[0.95] tracking-[-0.03em]">
+        <motion.h2 className="font-serif font-light leading-[0.95] tracking-[-0.03em]">
           {/* Line 1 */}
           <div className="overflow-hidden">
             <motion.span
@@ -93,7 +93,7 @@ export default function HeroContent() {
               </motion.span>
             </AnimatePresence>
           </div>
-        </motion.h1>
+        </motion.h2>
       </div>
 
       {/* DESCRIPTION */}

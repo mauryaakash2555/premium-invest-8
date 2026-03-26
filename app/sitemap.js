@@ -88,6 +88,7 @@ export default async function sitemap() {
     "/blog",
     "/execution-partners",
     "/legal-disclosures",
+    "/regulatory-compliance",
     "/contact",
     "/about-us",
     "/services",

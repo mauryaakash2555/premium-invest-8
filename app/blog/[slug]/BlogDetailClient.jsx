@@ -218,13 +218,36 @@ export default function BlogDetailClient({ slug, initialPost = null }) {
 
   const estimatedReadTime = useMemo(() => {
     if (!post) return null;
-    if (post.estimatedReadTime) return post.estimatedReadTime;
-    if (post.readTime) return post.readTime;
+    const raw = post.estimatedReadTime ?? post.readTime ?? post.read_time ?? null;
+    if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) return Math.max(1, Math.round(raw));
+    if (typeof raw === 'string' && raw.trim()) {
+      const m = raw.match(/(\d+)/);
+      if (m) {
+        const n = Number(m[1]);
+        if (Number.isFinite(n) && n > 0) return Math.max(1, Math.round(n));
+      }
+    }
     // Estimate from content: ~200 words per minute
     const text = typeof post.content === 'string' ? post.content.replace(/<[^>]*>/g, '') : '';
     const words = text.split(/\s+/).filter(Boolean).length;
     const mins = Math.max(1, Math.round(words / 200));
     return mins;
+  }, [post]);
+
+  const publishDateLabel = useMemo(() => {
+    if (!post) return '';
+    const direct = post.publishDate || post.published || post.date;
+    if (direct) return String(direct);
+
+    const iso = post.published_date || post.date_published || post.datePublished;
+    if (!iso) return '';
+    try {
+      const d = new Date(String(iso));
+      if (Number.isNaN(d.getTime())) return '';
+      return d.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+    } catch {
+      return '';
+    }
   }, [post]);
 
   const isDevPillar = useMemo(() => {
@@ -864,7 +887,7 @@ export default function BlogDetailClient({ slug, initialPost = null }) {
             fontSize: '14px'
           }}>
             <Calendar size={16} />
-            {post.publishDate || post.published || 'December 2025'}
+            {publishDateLabel || null}
           </div>
           <div style={{
             display: 'flex',
