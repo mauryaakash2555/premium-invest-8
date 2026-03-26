@@ -5286,6 +5286,7 @@ export const staticBlogPost10 = {
 // Affiliate CTAs are opt-in and marked as sponsored.
 export const staticBlogPost11 = {
   id: "blog-11",
+   isAffiliate: true,
   slug: "best-credit-cards-high-income-india",
   title: "Best Credit Cards for High-Income Professionals in India (2026)",
   author: "BM Wealth Editorial Team",
@@ -6082,6 +6083,7 @@ const staticBlogPost12_legacy = {
 // NOTE: Content provided by user. Do not alter words.
 export const staticBlogPost12 = {
   id: "blog-12",
+   isAffiliate: true,
   slug: "personal-loans-short-term-cashflow-professionals",
   title: "Personal Loans for Short-Term Cashflow: A Practical Guide for Professionals",
   author: "BM Wealth Editorial Team",

@@ -133,6 +133,9 @@ export default function ToolsHubPage() {
                   asset allocation, regime choice, coverage target, or timeline). If you want help validating assumptions or mapping the
                   result into a portfolio, you can reach us via the Contact page.
                 </p>
+                 <p className="mt-4 text-[11px] text-white/55">
+                   All tools are for educational purposes only and do not constitute investment advice. AMFI ARN 90008 | IRDAI 277925
+                 </p>
               </div>
 
             <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-fr">

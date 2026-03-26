@@ -63,6 +63,9 @@ export default function AllCalculatorsPage() {
                 SIP • Lumpsum • Goal Planning • Retirement • FD • Insurance • PPF • EPF • NPS • ELSS • EMI • SWP • Step-Up SIP • CAGR • Inflation • Gratuity • HRA • Income Tax • RD • SSY • Wealth Growth • MF Returns • Child Education • Marriage Fund • Car Loan • Home Loan • Gold Investment
               </p>
               <p className="mt-4 text-[11px] text-white/55">
+                All tools are for educational purposes only and do not constitute investment advice. AMFI ARN 90008 | IRDAI 277925
+              </p>
+              <p className="mt-4 text-[11px] text-white/55">
                 PMS Certification 2430447816 | ARN 90008 | IRDAI 277925
               </p>
               <p className="mt-3 text-[11px] text-white/55">

@@ -5,6 +5,7 @@ export const metadata = buildMetadata({
   title: 'Community Post | BM Wealth',
   description: 'Community impact and guest submissions approved by BM Wealth.',
   path: '/blog/community',
+  robots: { index: false, follow: true },
 });
 
 export default async function CommunityPostPage({ params }) {
