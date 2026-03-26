@@ -163,6 +163,7 @@ export default function AdminLeadsPage() {
                   <th style={thStyle}>Phone</th>
                   <th style={thStyle}>Interest</th>
                   <th style={thStyle}>Source</th>
+                  <th style={thStyle}>Status</th>
                   <th style={thStyle}>Date</th>
                 </tr>
               </thead>
@@ -174,6 +175,7 @@ export default function AdminLeadsPage() {
                     <td style={cellStyle}>{l.phone || "—"}</td>
                     <td style={cellStyle}>{l.interest || "—"}</td>
                     <td style={cellStyle}>{l.source || "—"}</td>
+                    <td style={cellStyle}>{l.status || "—"}</td>
                     <td style={cellStyle}>
                       {l.created_at
                         ? new Date(l.created_at).toLocaleDateString("en-IN", {

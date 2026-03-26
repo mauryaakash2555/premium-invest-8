@@ -10,15 +10,34 @@ create table if not exists public.leads (
   phone text,
   interest text,
   source text,
+  status text default 'new',
   lead_score integer default 0,
   created_at timestamp with time zone default now()
 );
 
--- Add interest/source columns for existing installs (safe to re-run).
+-- Add interest/source/status columns for existing installs (safe to re-run).
 do $$ begin
   alter table public.leads add column if not exists interest text;
   alter table public.leads add column if not exists source text;
+  alter table public.leads add column if not exists status text default 'new';
 exception when others then null;
+end $$;
+
+-- RLS policies (safe to re-run)
+alter table public.leads enable row level security;
+
+do $$ begin
+  create policy "Allow anon inserts on leads"
+    on public.leads for insert to anon
+    with check (true);
+exception when duplicate_object then null;
+end $$;
+
+do $$ begin
+  create policy "Allow service_role full access"
+    on public.leads for all to service_role
+    using (true) with check (true);
+exception when duplicate_object then null;
 end $$;
 
 create table if not exists public.conversations (
