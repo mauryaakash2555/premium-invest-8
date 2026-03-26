@@ -88,7 +88,7 @@ export default function BlogPage() {
           excerpt:
             base.excerpt ||
             base.summary ||
-            excerptFrom(base.content_enhanced || base.content_original || base.content || ''),
+            excerptFrom(base.content_original || base.content || ''),
           // Ensure image fields are passed through
           image_url: base.image_url || base.image || null,
           image: base.image_url || base.image || null,
