@@ -1,6 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+
+function formatDateIST(dateStr) {
+  if (!dateStr) return "—";
+  const d = new Date(dateStr);
+  if (isNaN(d)) return "—";
+  return d.toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: "Asia/Kolkata",
+  });
+}
+
+function isRealLead(source) {
+  const s = (source || "").toLowerCase();
+  return s === "blueprint" || s === "homepage";
+}
+
+function isWithinToday(dateStr) {
+  if (!dateStr) return false;
+  const now = new Date();
+  const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  const start = new Date(ist.getFullYear(), ist.getMonth(), ist.getDate());
+  const d = new Date(dateStr);
+  return d >= start;
+}
+
+function isWithinThisWeek(dateStr) {
+  if (!dateStr) return false;
+  const now = new Date();
+  const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+  const day = ist.getDay() || 7; // Mon=1
+  const start = new Date(ist.getFullYear(), ist.getMonth(), ist.getDate() - day + 1);
+  const d = new Date(dateStr);
+  return d >= start;
+}
+
+const SOURCE_OPTIONS = ["All Sources", "blueprint", "homepage", "blog", "other"];
+const DATE_OPTIONS = ["All Time", "Today", "This Week"];
 
 export default function AdminLeadsPage() {
   const [password, setPassword] = useState("");
@@ -8,6 +50,8 @@ export default function AdminLeadsPage() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [sourceFilter, setSourceFilter] = useState("All Sources");
+  const [dateFilter, setDateFilter] = useState("All Time");
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -54,6 +98,27 @@ export default function AdminLeadsPage() {
     return () => { cancelled = true; };
   }, [authed]);
 
+  const filteredLeads = useMemo(() => {
+    let list = [...leads];
+    // Sort newest first
+    list.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+    // Source filter
+    if (sourceFilter !== "All Sources") {
+      if (sourceFilter === "other") {
+        list = list.filter((l) => {
+          const s = (l.source || "").toLowerCase();
+          return s && !["blueprint", "homepage", "blog"].includes(s);
+        });
+      } else {
+        list = list.filter((l) => (l.source || "").toLowerCase() === sourceFilter);
+      }
+    }
+    // Date filter
+    if (dateFilter === "Today") list = list.filter((l) => isWithinToday(l.created_at));
+    if (dateFilter === "This Week") list = list.filter((l) => isWithinThisWeek(l.created_at));
+    return list;
+  }, [leads, sourceFilter, dateFilter]);
+
   const cellStyle = {
     padding: "10px 14px",
     borderBottom: "1px solid rgba(255,255,255,0.08)",
@@ -69,6 +134,52 @@ export default function AdminLeadsPage() {
     fontSize: "11px",
     letterSpacing: "0.1em",
     textTransform: "uppercase",
+  };
+
+  const filterBarStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "12px",
+    alignItems: "center",
+    marginBottom: 20,
+  };
+
+  const selectStyle = {
+    padding: "8px 12px",
+    border: "1px solid rgba(255,255,255,0.14)",
+    borderRadius: 0,
+    background: "rgba(0,0,0,0.65)",
+    color: "rgba(235,242,255,0.92)",
+    fontSize: 13,
+    outline: "none",
+    cursor: "pointer",
+  };
+
+  const dateBtnStyle = (active) => ({
+    padding: "8px 14px",
+    border: active ? "1px solid var(--lux-accent)" : "1px solid rgba(255,255,255,0.14)",
+    borderRadius: 0,
+    background: active ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.65)",
+    color: active ? "var(--lux-accent)" : "rgba(235,242,255,0.72)",
+    fontSize: 13,
+    fontWeight: active ? 600 : 400,
+    cursor: "pointer",
+    letterSpacing: "0.03em",
+  });
+
+  const badgeStyle = {
+    display: "inline-block",
+    padding: "2px 8px",
+    fontSize: 11,
+    fontWeight: 600,
+    letterSpacing: "0.05em",
+    color: "var(--lux-accent)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    background: "rgba(255,255,255,0.04)",
+  };
+
+  const realLeadRowStyle = {
+    borderLeft: "2px solid var(--lux-accent)",
   };
 
   if (!authed) {
@@ -149,11 +260,44 @@ export default function AdminLeadsPage() {
         {error && <p style={{ color: "#f87171", fontSize: 13, marginBottom: 12 }}>{error}</p>}
         {loading && <p style={{ color: "rgba(235,242,255,0.6)", fontSize: 14 }}>Loading…</p>}
 
+        {!loading && !error && leads.length > 0 && (
+          <>
+            {/* Filters */}
+            <div style={filterBarStyle}>
+              <select
+                value={sourceFilter}
+                onChange={(e) => setSourceFilter(e.target.value)}
+                style={selectStyle}
+              >
+                {SOURCE_OPTIONS.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+
+              {DATE_OPTIONS.map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setDateFilter(d)}
+                  style={dateBtnStyle(dateFilter === d)}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+
+            {/* Lead count */}
+            <p style={{ color: "rgba(235,242,255,0.55)", fontSize: 13, marginBottom: 14 }}>
+              Showing {filteredLeads.length} lead{filteredLeads.length !== 1 ? "s" : ""}
+            </p>
+          </>
+        )}
+
         {!loading && leads.length === 0 && !error && (
           <p style={{ color: "rgba(235,242,255,0.5)", fontSize: 14 }}>No leads yet.</p>
         )}
 
-        {leads.length > 0 && (
+        {filteredLeads.length > 0 && (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
@@ -168,27 +312,26 @@ export default function AdminLeadsPage() {
                 </tr>
               </thead>
               <tbody>
-                {leads.map((l) => (
-                  <tr key={l.id}>
-                    <td style={cellStyle}>{l.name || "—"}</td>
-                    <td style={cellStyle}>{l.email || "—"}</td>
-                    <td style={cellStyle}>{l.phone || "—"}</td>
-                    <td style={cellStyle}>{l.interest || "—"}</td>
-                    <td style={cellStyle}>{l.source || "—"}</td>
-                    <td style={cellStyle}>{l.status || "—"}</td>
-                    <td style={cellStyle}>
-                      {l.created_at
-                        ? new Date(l.created_at).toLocaleDateString("en-IN", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : "—"}
-                    </td>
-                  </tr>
-                ))}
+                {filteredLeads.map((l) => {
+                  const real = isRealLead(l.source);
+                  return (
+                    <tr key={l.id} style={real ? realLeadRowStyle : undefined}>
+                      <td style={cellStyle}>{l.name || "—"}</td>
+                      <td style={cellStyle}>{l.email || "—"}</td>
+                      <td style={cellStyle}>{l.phone || "—"}</td>
+                      <td style={cellStyle}>{l.interest || "—"}</td>
+                      <td style={cellStyle}>
+                        {real ? (
+                          <span style={badgeStyle}>{l.source}</span>
+                        ) : (
+                          l.source || "—"
+                        )}
+                      </td>
+                      <td style={cellStyle}>{l.status || "—"}</td>
+                      <td style={cellStyle}>{formatDateIST(l.created_at)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
