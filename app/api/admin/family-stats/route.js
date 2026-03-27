@@ -4,6 +4,7 @@ import { isAdminFromRequest } from "@/lib/adminSession";
 import { isFamilyFromRequest } from "@/lib/familySession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { CONSTANTS } from "@/config/constants";
+import { getIstRangeStarts } from "@/lib/time/istRanges";
 
 function sumRevenue(events = []) {
   return (events || []).reduce((sum, e) => {
@@ -18,15 +19,6 @@ function tierFromScore(score) {
   if (n >= (CONSTANTS?.LEAD_SCORING?.HOT_THRESHOLD ?? 80)) return "HOT";
   if (n >= (CONSTANTS?.LEAD_SCORING?.WARM_THRESHOLD ?? 40)) return "WARM";
   return "COLD";
-}
-
-function mondayStart(d) {
-  const x = new Date(d);
-  x.setHours(0, 0, 0, 0);
-  const day = x.getDay();
-  const diff = (day === 0 ? -6 : 1) - day; // Monday start
-  x.setDate(x.getDate() + diff);
-  return x;
 }
 
 export async function GET(req) {
@@ -61,13 +53,7 @@ export async function GET(req) {
     return NextResponse.json({ ok: false, error: "setup_required" }, { status: 503 });
   }
 
-  const now = new Date();
-  const todayStart = new Date(now);
-  todayStart.setHours(0, 0, 0, 0);
-  const weekStart = mondayStart(now);
-  const monthStart = new Date(now);
-  monthStart.setHours(0, 0, 0, 0);
-  monthStart.setDate(1);
+  const { dayStart: todayStart, weekStart, monthStart } = getIstRangeStarts();
 
   const [todayLeadsCount, weekLeadsRes, monthLeadsCount, todayConversationsCount, revTodayRes, revWeekRes, revMonthRes] =
     await Promise.all([

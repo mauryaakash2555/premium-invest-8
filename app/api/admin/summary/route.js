@@ -6,12 +6,13 @@ import { isFeatureEnabled } from "@/config/features";
 import { CONSTANTS } from "@/config/constants";
 import { loadPlugins } from "@/lib/plugins/loadPlugins";
 import { runPluginHook } from "@/lib/plugins/PluginManager";
+import { getIstRangeStarts } from "@/lib/time/istRanges";
 
 export async function GET(req) {
   const cookieStore = await cookies();
   const headerStore = await headers();
   if (!isAdminFromRequest(cookieStore, headerStore)) {
-    return NextResponse.json({ ok: false }, { status: 401 });
+    return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
   }
 
   // Plugins (best-effort)
@@ -54,16 +55,7 @@ export async function GET(req) {
     });
   }
 
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const weekStart = new Date(start);
-  {
-    const day = weekStart.getDay(); // 0 Sun..6 Sat
-    const diff = (day === 0 ? -6 : 1) - day; // Monday start
-    weekStart.setDate(weekStart.getDate() + diff);
-  }
-  const monthStart = new Date(start);
-  monthStart.setDate(1);
+  const { dayStart: start, weekStart, monthStart } = getIstRangeStarts();
 
   const enableRevenue = isFeatureEnabled("REVENUE_TRACKING");
   const enableScoring = isFeatureEnabled("LEAD_SCORING");
