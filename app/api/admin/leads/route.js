@@ -83,7 +83,7 @@ function computeRange(filter) {
 export async function GET(req) {
   const cookieStore = await cookies();
   const headerStore = await headers();
-  if (!isAdminFromRequest(cookieStore, headerStore)) return NextResponse.json({ ok: false }, { status: 401 });
+  if (!isAdminFromRequest(cookieStore, headerStore)) return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
 
   let sb;
   try {
