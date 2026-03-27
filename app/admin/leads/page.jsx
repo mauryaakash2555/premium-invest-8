@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { getIstRangeStarts } from "@/lib/time/istRanges";
 
 function formatDateIST(dateStr) {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
   if (isNaN(d)) return "—";
-  return d.toLocaleString("en-IN", {
+  const parts = new Intl.DateTimeFormat("en-IN", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -14,34 +15,43 @@ function formatDateIST(dateStr) {
     minute: "2-digit",
     hour12: true,
     timeZone: "Asia/Kolkata",
-  });
-}
-
-function isRealLead(source) {
-  const s = (source || "").toLowerCase();
-  return s === "blueprint" || s === "homepage";
+  }).formatToParts(d);
+  const day = parts.find((part) => part.type === "day")?.value || "—";
+  const month = parts.find((part) => part.type === "month")?.value || "—";
+  const year = parts.find((part) => part.type === "year")?.value || "—";
+  const hour = parts.find((part) => part.type === "hour")?.value || "—";
+  const minute = parts.find((part) => part.type === "minute")?.value || "00";
+  const dayPeriod = (parts.find((part) => part.type === "dayPeriod")?.value || "").toUpperCase();
+  return `${day} ${month} ${year}, ${hour}:${minute} ${dayPeriod} IST`;
 }
 
 function isWithinToday(dateStr) {
   if (!dateStr) return false;
-  const now = new Date();
-  const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  const start = new Date(ist.getFullYear(), ist.getMonth(), ist.getDate());
-  const d = new Date(dateStr);
-  return d >= start;
+  return new Date(dateStr) >= getIstRangeStarts().dayStart;
 }
 
 function isWithinThisWeek(dateStr) {
   if (!dateStr) return false;
-  const now = new Date();
-  const ist = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
-  const day = ist.getDay() || 7; // Mon=1
-  const start = new Date(ist.getFullYear(), ist.getMonth(), ist.getDate() - day + 1);
-  const d = new Date(dateStr);
-  return d >= start;
+  return new Date(dateStr) >= getIstRangeStarts().weekStart;
 }
 
-const SOURCE_OPTIONS = ["All Sources", "blueprint", "homepage", "blog", "other"];
+function isTestLead(lead) {
+  const name = String(lead?.name || "").trim();
+  const email = String(lead?.email || "").trim().toLowerCase();
+  const phone = String(lead?.phone || "").replace(/\D/g, "");
+  const text = JSON.stringify(lead || {}).toLowerCase();
+  if (/\b(test|demo|sample|dummy|fake|asdf)\b/.test(text)) return true;
+  if (name && /test|demo|sample|dummy|asdf|user\d*/i.test(name)) return true;
+  if (email && (/example\.com/.test(email) || /test|demo|fake/.test(email))) return true;
+  if (phone && (/^9{6,}/.test(phone) || /^1{6,}/.test(phone) || /^0{6,}/.test(phone) || /12345/.test(phone) || /^555/.test(phone))) return true;
+  return false;
+}
+
+const SOURCE_OPTIONS = [
+  { value: "all", label: "All Sources" },
+  { value: "blueprint_form", label: "Blueprint Form" },
+  { value: "whatsapp_bot", label: "WhatsApp Bot" },
+];
 const DATE_OPTIONS = ["All Time", "Today", "This Week"];
 
 export default function AdminLeadsPage() {
@@ -50,7 +60,7 @@ export default function AdminLeadsPage() {
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [sourceFilter, setSourceFilter] = useState("All Sources");
+  const [sourceFilter, setSourceFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("All Time");
 
   async function handleLogin(e) {
@@ -100,20 +110,10 @@ export default function AdminLeadsPage() {
 
   const filteredLeads = useMemo(() => {
     let list = [...leads];
-    // Sort newest first
     list.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-    // Source filter
-    if (sourceFilter !== "All Sources") {
-      if (sourceFilter === "other") {
-        list = list.filter((l) => {
-          const s = (l.source || "").toLowerCase();
-          return s && !["blueprint", "homepage", "blog"].includes(s);
-        });
-      } else {
-        list = list.filter((l) => (l.source || "").toLowerCase() === sourceFilter);
-      }
+    if (sourceFilter !== "all") {
+      list = list.filter((l) => l.source_group === sourceFilter);
     }
-    // Date filter
     if (dateFilter === "Today") list = list.filter((l) => isWithinToday(l.created_at));
     if (dateFilter === "This Week") list = list.filter((l) => isWithinThisWeek(l.created_at));
     return list;
@@ -125,6 +125,15 @@ export default function AdminLeadsPage() {
     fontSize: "13px",
     color: "rgba(235,242,255,0.85)",
     whiteSpace: "nowrap",
+    verticalAlign: "top",
+  };
+
+  const messageCellStyle = {
+    ...cellStyle,
+    whiteSpace: "normal",
+    minWidth: 280,
+    maxWidth: 420,
+    lineHeight: 1.45,
   };
 
   const thStyle = {
@@ -176,11 +185,38 @@ export default function AdminLeadsPage() {
     color: "var(--lux-accent)",
     border: "1px solid rgba(255,255,255,0.12)",
     background: "rgba(255,255,255,0.04)",
+    marginRight: 6,
   };
 
-  const realLeadRowStyle = {
-    borderLeft: "2px solid var(--lux-accent)",
+  const tableBadgeStyle = (tableName) => ({
+    ...badgeStyle,
+    color: tableName === "onboarding_leads" ? "rgba(255,255,255,0.88)" : "var(--lux-accent)",
+    background: tableName === "onboarding_leads" ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
+  });
+
+  const statusBadgeStyle = (status) => ({
+    ...badgeStyle,
+    color: status === "converted" ? "#9ae6b4" : status === "contacted" ? "#fbd38d" : "rgba(235,242,255,0.92)",
+    background: status === "converted" ? "rgba(154,230,180,0.10)" : status === "contacted" ? "rgba(251,211,141,0.10)" : "rgba(255,255,255,0.06)",
+  });
+
+  const hotBadgeStyle = {
+    ...badgeStyle,
+    color: "#f6d28b",
+    border: "1px solid rgba(246,210,139,0.35)",
+    background: "rgba(246,210,139,0.10)",
   };
+
+  const sourceBadgeStyle = (source) => ({
+    ...badgeStyle,
+    color: source === "homepage" || source === "blog" ? "rgba(235,242,255,0.92)" : "var(--lux-accent)",
+  });
+
+  const leadRowStyle = (lead) => ({
+    borderLeft: "2px solid var(--lux-accent)",
+    opacity: isTestLead(lead) ? 0.56 : 1,
+    background: lead.is_hot ? "rgba(246,210,139,0.06)" : undefined,
+  });
 
   if (!authed) {
     return (
@@ -270,7 +306,7 @@ export default function AdminLeadsPage() {
                 style={selectStyle}
               >
                 {SOURCE_OPTIONS.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s.value} value={s.value}>{s.label}</option>
                 ))}
               </select>
 
@@ -288,7 +324,7 @@ export default function AdminLeadsPage() {
 
             {/* Lead count */}
             <p style={{ color: "rgba(235,242,255,0.55)", fontSize: 13, marginBottom: 14 }}>
-              Showing {filteredLeads.length} lead{filteredLeads.length !== 1 ? "s" : ""}
+              {filteredLeads.length} lead{filteredLeads.length !== 1 ? "s" : ""} total
             </p>
           </>
         )}
@@ -305,7 +341,7 @@ export default function AdminLeadsPage() {
                   <th style={thStyle}>Name</th>
                   <th style={thStyle}>Email</th>
                   <th style={thStyle}>Phone</th>
-                  <th style={thStyle}>Interest</th>
+                  <th style={thStyle}>Interest / Message</th>
                   <th style={thStyle}>Source</th>
                   <th style={thStyle}>Status</th>
                   <th style={thStyle}>Date</th>
@@ -313,21 +349,24 @@ export default function AdminLeadsPage() {
               </thead>
               <tbody>
                 {filteredLeads.map((l) => {
-                  const real = isRealLead(l.source);
                   return (
-                    <tr key={l.id} style={real ? realLeadRowStyle : undefined}>
-                      <td style={cellStyle}>{l.name || "—"}</td>
+                    <tr key={l.id} style={leadRowStyle(l)}>
+                      <td style={cellStyle}>
+                        <div style={{ fontWeight: 500, marginBottom: 6 }}>{l.name || "—"}</div>
+                        <span style={tableBadgeStyle(l.lead_table)}>{l.table_label}</span>
+                        {l.is_hot ? <span style={hotBadgeStyle}>HOT</span> : null}
+                      </td>
                       <td style={cellStyle}>{l.email || "—"}</td>
                       <td style={cellStyle}>{l.phone || "—"}</td>
-                      <td style={cellStyle}>{l.interest || "—"}</td>
-                      <td style={cellStyle}>
-                        {real ? (
-                          <span style={badgeStyle}>{l.source}</span>
-                        ) : (
-                          l.source || "—"
-                        )}
+                      <td style={messageCellStyle}>
+                        {l.interest_or_message || <span style={{ opacity: 0.5 }}>—</span>}
                       </td>
-                      <td style={cellStyle}>{l.status || "—"}</td>
+                      <td style={cellStyle}>
+                        <span style={sourceBadgeStyle(l.source)}>{l.source || "—"}</span>
+                      </td>
+                      <td style={cellStyle}>
+                        <span style={statusBadgeStyle(l.status)}>{l.status}</span>
+                      </td>
                       <td style={cellStyle}>{formatDateIST(l.created_at)}</td>
                     </tr>
                   );
