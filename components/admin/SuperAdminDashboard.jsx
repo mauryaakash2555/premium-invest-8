@@ -27,6 +27,20 @@ function fmtINR(n) {
   return x.toLocaleString('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 }
 
+function formatLeadDate(dateStr) {
+  if (!dateStr) return '—';
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: 'numeric',
+    month: 'short',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
 function digitsOnly(s) {
   return String(s || '').replace(/\D+/g, '');
 }
@@ -140,6 +154,10 @@ export function SuperAdminDashboard({ onLogout }) {
       if (hot.length >= 12) break;
     }
     return hot;
+  }, [summary]);
+
+  const recentLeads = useMemo(() => {
+    return (summary?.all?.leads || []).slice(0, 8);
   }, [summary]);
 
   const revBreakdown = useMemo(() => {
@@ -407,6 +425,30 @@ export function SuperAdminDashboard({ onLogout }) {
                   </div>
                 ) : (
                   <div className="sa-muted">No hot leads yet.</div>
+                )}
+              </section>
+
+              <section className="sa-panel">
+                <div className="sa-panelHead">
+                  <div className="sa-panelTitle">LATEST LEADS ({recentLeads.length})</div>
+                  <button className="sa-miniBtn" onClick={() => switchTab('leads')}>Open Leads →</button>
+                </div>
+                {recentLeads.length ? (
+                  <div className="sa-list">
+                    {recentLeads.map((lead) => (
+                      <div className="sa-row" key={lead.id}>
+                        <div>
+                          <div className="sa-rowTitle">{lead.name || 'Anonymous'}</div>
+                          <div className="sa-rowSub">{lead.email || lead.phone || '—'}</div>
+                        </div>
+                        <div className="sa-rowActions">
+                          <span className="sa-chip">{formatLeadDate(lead.created_at)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="sa-muted">No leads captured yet.</div>
                 )}
               </section>
 

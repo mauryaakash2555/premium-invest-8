@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { getIstRangeForFilter } from "@/lib/time/istRanges";
 
 const LEADS_LIMIT = 200;
 const SUPABASE_TIMEOUT_MS = 8_000;
@@ -30,54 +31,8 @@ async function withTimeout(promise, ms) {
   }
 }
 
-function startOfDay(d) {
-  const x = new Date(d);
-  x.setHours(0, 0, 0, 0);
-  return x;
-}
-
-function startOfWeekMonday(d) {
-  const x = startOfDay(d);
-  const day = x.getDay(); // 0 Sun..6 Sat
-  const diff = (day === 0 ? -6 : 1) - day; // Monday as start
-  x.setDate(x.getDate() + diff);
-  return x;
-}
-
-function startOfMonth(d) {
-  const x = startOfDay(d);
-  x.setDate(1);
-  return x;
-}
-
-function startOfYear(d) {
-  const x = startOfDay(d);
-  x.setMonth(0, 1);
-  return x;
-}
-
 function computeRange(filter) {
-  const now = new Date();
-  const todayStart = startOfDay(now);
-
-  switch (filter) {
-    case "today":
-      return { from: todayStart, to: null };
-    case "yesterday": {
-      const y = new Date(todayStart);
-      y.setDate(y.getDate() - 1);
-      return { from: y, to: todayStart };
-    }
-    case "week":
-      return { from: startOfWeekMonday(now), to: null };
-    case "month":
-      return { from: startOfMonth(now), to: null };
-    case "year":
-      return { from: startOfYear(now), to: null };
-    case "all":
-    default:
-      return { from: null, to: null };
-  }
+  return getIstRangeForFilter(filter);
 }
 
 export async function GET(req) {
