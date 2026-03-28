@@ -14,6 +14,15 @@ export default function BlueprintClient() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState(null); // { ok, name } or { ok:false, error }
 
+  const guideLink =
+    form.interest === "Understanding PMS (₹50L+ portfolio)"
+      ? "/guides/portfolio-strategy-guide.pdf"
+      : "/guides/beginner-guide.pdf";
+  const guideLabel =
+    form.interest === "Understanding PMS (₹50L+ portfolio)"
+      ? "Download Your Portfolio Strategy Guide"
+      : "Download Your Beginner Guide";
+
   function handleChange(e) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
@@ -143,8 +152,28 @@ export default function BlueprintClient() {
                   <p className="text-lg font-light mb-2" style={{ color: "var(--lux-accent)" }}>
                     Thank you {result.name}!
                   </p>
-                  <p className="text-[14px] text-white/60 leading-relaxed">
+                  <p className="text-[14px] text-white/60 leading-relaxed mb-6">
                     Your guide request has been noted. We&apos;ll reach out shortly.
+                  </p>
+                  <a
+                    href={guideLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative inline-flex items-center justify-center gap-3 overflow-hidden px-8 py-3.5 transition-[color,opacity,transform] duration-500"
+                    style={{ backgroundColor: "oklch(0.95 0.01 85)", color: "oklch(0.06 0.005 280)" }}
+                  >
+                    <span className="relative z-10 flex items-center gap-3 font-sans text-[11px] tracking-[0.22em] uppercase font-semibold">
+                      {guideLabel}
+                      <svg className="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-y-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-500"
+                      style={{ backgroundColor: "var(--lux-accent)" }}
+                    />
+                  </a>
+                  <p className="mt-3 text-[11px] text-white/40">
+                    Your guide will also be sent to your email shortly.
                   </p>
                 </div>
               ) : (
