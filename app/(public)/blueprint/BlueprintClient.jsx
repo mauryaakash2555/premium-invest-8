@@ -175,6 +175,9 @@ export default function BlueprintClient() {
                   <p className="mt-3 text-[11px] text-white/40">
                     A copy has been sent to {result.email} as well.
                   </p>
+                  <p className="mt-1.5 text-[10px] text-white/30">
+                    Please check your Promotions or Spam folder if you don&apos;t see it in your inbox.
+                  </p>
                 </div>
               ) : (
                 /* FORM */
