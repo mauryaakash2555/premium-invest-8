@@ -40,7 +40,9 @@ export async function POST(req) {
 
     // Only upsert into leads if email is valid (leads table uses email as unique key).
     if (valid && validateEmail(email)) {
-      lead = await upsertLead({ name, email, phone });
+      const interest = String(payload?.interest || '').slice(0, 200) || undefined;
+      const source = String(payload?.source || 'contact').slice(0, 100);
+      lead = await upsertLead({ name, email, phone, interest, source });
     }
 
     await logEventSafe({

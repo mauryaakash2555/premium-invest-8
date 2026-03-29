@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import { sendNewsletterWelcome } from "@/lib/email/brevo";
 
 export async function POST(request) {
   try {
@@ -11,17 +13,38 @@ export async function POST(request) {
       );
     }
 
-    console.log("Newsletter signup:", email);
+    const cleanEmail = String(email).trim().toLowerCase();
+    const sb = supabaseAdmin();
 
-    return NextResponse.json(
-      { message: "Successfully subscribed", email },
-      { status: 200 }
-    );
+    const { error } = await sb.from("leads").insert({
+      name: "Newsletter Subscriber",
+      email: cleanEmail,
+      phone: null,
+      interest: "Newsletter",
+      source: "footer-newsletter",
+      status: "new",
+    });
+
+    // Duplicate email — treat as success
+    if (error && (error.code === "23505" || String(error.message || "").includes("unique"))) {
+      return NextResponse.json({ message: "Successfully subscribed", email: cleanEmail });
+    }
+
+    if (error) {
+      console.error("[newsletter/subscribe] Supabase error:", error.message);
+      return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
+    }
+
+    // Best-effort: send welcome email via Brevo
+    try {
+      await sendNewsletterWelcome({ email: cleanEmail });
+    } catch (emailErr) {
+      console.error("[newsletter/subscribe] Welcome email failed:", emailErr?.message);
+    }
+
+    return NextResponse.json({ message: "Successfully subscribed", email: cleanEmail });
   } catch (error) {
     console.error("Newsletter subscription error:", error);
-    return NextResponse.json(
-      { error: "Subscription failed" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
   }
 }

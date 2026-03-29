@@ -23,6 +23,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Phone, Mail, MapPin, Send, Loader2, MessageCircle } from 'lucide-react';
 import MobileScrollBoost from '@/components/user/MobileScrollBoost';
 import axios from 'axios';
@@ -45,6 +46,8 @@ function mulberry32(seed) {
 }
 
 const Contact = () => {
+  const searchParams = useSearchParams();
+  const isNewsletter = searchParams.get('type') === 'newsletter';
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -128,7 +131,8 @@ const Contact = () => {
       
       const response = await axios.post(`/api/contact`, {
         ...formData,
-        recaptcha_token: recaptchaToken // null if not available
+        recaptcha_token: recaptchaToken, // null if not available
+        ...(isNewsletter ? { source: 'contact-newsletter', interest: 'Newsletter' } : {}),
       }, {
         timeout: 30000, // 30 second timeout - faster failure for better UX
         headers: {
