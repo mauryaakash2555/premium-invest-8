@@ -17,6 +17,16 @@ import { sanitizeInput, validateLeadData, normalizePhone } from "@/lib/utils/val
 import { EmailPreferencesDB } from "@/lib/db/emailPreferences";
 import { EmailService } from "@/lib/email/emailService";
 import { logEventSafe } from "@/lib/db/events";
+import { sendGuideEmail } from "@/lib/email/brevo";
+
+const GUIDE_URLS = {
+  pms: "https://bmwealth.co.in/guides/portfolio-strategy-guide.pdf",
+  default: "https://bmwealth.co.in/guides/beginner-guide.pdf",
+};
+
+function guideUrlForInterest(interest) {
+  return String(interest || "").includes("PMS") ? GUIDE_URLS.pms : GUIDE_URLS.default;
+}
 
 function isMissingLeadsTable(msg) {
   const m = String(msg || "");
@@ -83,6 +93,20 @@ export async function POST(req) {
       event_type: 'lead_captured',
       data: { source, interest },
     });
+
+    // Best-effort: send PDF guide via Brevo
+    if (source === "blueprint" && email) {
+      try {
+        await sendGuideEmail({
+          name,
+          email,
+          interest,
+          guideUrl: guideUrlForInterest(interest),
+        });
+      } catch (emailErr) {
+        console.error("[leads] Brevo guide email failed:", emailErr?.message || emailErr);
+      }
+    }
 
     return NextResponse.json({ ok: true, lead });
   } catch (e) {

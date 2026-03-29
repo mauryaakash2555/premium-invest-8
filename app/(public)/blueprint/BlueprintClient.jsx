@@ -49,9 +49,9 @@ export default function BlueprintClient() {
 
       const errMsg = String(json.error || "").toLowerCase();
       if (res.ok && json.ok) {
-        setResult({ ok: true, name: form.name.trim().split(" ")[0] || "there" });
+        setResult({ ok: true, name: form.name.trim().split(" ")[0] || "there", email: form.email.trim() });
       } else if (errMsg.includes("duplicate") || errMsg.includes("unique")) {
-        setResult({ ok: true, name: form.name.trim().split(" ")[0] || "there" });
+        setResult({ ok: true, name: form.name.trim().split(" ")[0] || "there", email: form.email.trim() });
       } else {
         setResult({ ok: false, error: json.error || "Something went wrong. Please try again or WhatsApp us directly." });
       }
@@ -173,7 +173,7 @@ export default function BlueprintClient() {
                     />
                   </a>
                   <p className="mt-3 text-[11px] text-white/40">
-                    Your guide will also be sent to your email shortly.
+                    A copy has been sent to {result.email} as well.
                   </p>
                 </div>
               ) : (
