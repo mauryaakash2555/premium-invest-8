@@ -96,15 +96,17 @@ export async function POST(req) {
 
     // Best-effort: send PDF guide via Brevo
     if (source === "blueprint" && email) {
+      console.log("[leads] Brevo env check:", { keyExists: !!process.env.BREVO_API_KEY, sender: process.env.BREVO_SENDER_EMAIL });
       try {
-        await sendGuideEmail({
+        const emailResult = await sendGuideEmail({
           name,
           email,
           interest,
           guideUrl: guideUrlForInterest(interest),
         });
+        console.log("[leads] Brevo guide email sent:", JSON.stringify(emailResult));
       } catch (emailErr) {
-        console.error("[leads] Brevo guide email failed:", emailErr?.message || emailErr);
+        console.error("[leads] Brevo guide email failed:", emailErr?.message, emailErr?.statusCode, JSON.stringify(emailErr?.body || emailErr?.response?.body || {}));
       }
     }
 
