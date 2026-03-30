@@ -9,7 +9,8 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { isAdminFromRequest } from '@/lib/adminSession';
 import { getHeadlineImage } from '@/lib/images/unsplash';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,28 +23,11 @@ function getSupabase() {
   return createClient(supabaseUrl, supabaseKey);
 }
 
-async function verifyAdmin() {
-  try {
-    const cookieStore = await cookies();
-    const sessionToken = cookieStore.get('admin_session')?.value;
-    if (!sessionToken) return false;
-    const supabase = getSupabase();
-    const { data } = await supabase
-      .from('admin_sessions')
-      .select('id')
-      .eq('session_token', sessionToken)
-      .gt('expires_at', new Date().toISOString())
-      .single();
-    return Boolean(data);
-  } catch {
-    return false;
-  }
-}
-
 export async function POST() {
   try {
-    const isAdmin = await verifyAdmin();
-    if (!isAdmin) {
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

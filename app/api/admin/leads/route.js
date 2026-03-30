@@ -136,21 +136,21 @@ function buildRangeQuery(q, from, to) {
 }
 
 async function fetchLeads(sb, from, to) {
-  const baseQuery = () => buildRangeQuery(
-    sb.from("leads").order("created_at", { ascending: false }).limit(LEADS_LIMIT),
+  const baseQuery = (columns) => buildRangeQuery(
+    sb.from("leads").select(columns).order("created_at", { ascending: false }).limit(LEADS_LIMIT),
     from,
     to
   );
 
   let res;
   try {
-    res = await withTimeout(baseQuery().select("id,name,email,phone,interest,source,status,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
+    res = await withTimeout(baseQuery("id,name,email,phone,interest,source,status,created_at,lead_score"), SUPABASE_TIMEOUT_MS);
   } catch (e) {
     throw e;
   }
 
   if (res?.error && isMissingColumnError(res.error, "lead_score")) {
-    res = await withTimeout(baseQuery().select("id,name,email,phone,interest,source,status,created_at"), SUPABASE_TIMEOUT_MS);
+    res = await withTimeout(baseQuery("id,name,email,phone,interest,source,status,created_at"), SUPABASE_TIMEOUT_MS);
   }
 
   if (res?.error) throw res.error;
