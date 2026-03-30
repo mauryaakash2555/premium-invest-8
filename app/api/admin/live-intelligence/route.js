@@ -9,7 +9,8 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { isAdminFromRequest } from '@/lib/adminSession';
 import { normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
 import { getHeadlineImage } from '@/lib/images/unsplash';
 
@@ -21,30 +22,6 @@ function getSupabase() {
     throw new Error('Supabase not configured');
   }
   return createClient(supabaseUrl, supabaseKey);
-}
-
-// Verify admin session
-async function verifyAdmin() {
-  try {
-    const cookieStore = await cookies();
-    const sessionToken = cookieStore.get('admin_session')?.value;
-    
-    if (!sessionToken) return false;
-    
-    const supabase = getSupabase();
-    const { data, error } = await supabase
-      .from('admin_sessions')
-      .select('*')
-      .eq('token', sessionToken)
-      .single();
-    
-    if (error || !data) return false;
-    if (new Date(data.expires_at) < new Date()) return false;
-    
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 export const dynamic = 'force-dynamic';
@@ -76,8 +53,9 @@ function toIsoOrNull(value) {
  */
 export async function GET() {
   try {
-    const isAdmin = await verifyAdmin();
-    if (!isAdmin) {
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -158,8 +136,9 @@ export async function GET() {
  */
 export async function POST(request) {
   try {
-    const isAdmin = await verifyAdmin();
-    if (!isAdmin) {
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -216,8 +195,9 @@ export async function POST(request) {
  */
 export async function PUT(request) {
   try {
-    const isAdmin = await verifyAdmin();
-    if (!isAdmin) {
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -315,8 +295,9 @@ export async function PUT(request) {
  */
 export async function DELETE(request) {
   try {
-    const isAdmin = await verifyAdmin();
-    if (!isAdmin) {
+    const cookieStore = await cookies();
+    const headerStore = await headers();
+    if (!isAdminFromRequest(cookieStore, headerStore)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     

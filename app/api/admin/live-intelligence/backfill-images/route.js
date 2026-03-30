@@ -11,7 +11,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies, headers } from 'next/headers';
 import { isAdminFromRequest } from '@/lib/adminSession';
-import { getHeadlineImage } from '@/lib/images/unsplash';
+import { getHeadlineImage, resetUsedImages } from '@/lib/images/unsplash';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -49,6 +49,8 @@ export async function POST() {
 
     let updated = 0;
     const errors = [];
+
+    resetUsedImages();
 
     for (const row of rows) {
       try {
