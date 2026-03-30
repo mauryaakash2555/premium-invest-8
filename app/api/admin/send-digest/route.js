@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { verifySuperAdminPassword } from "@/lib/auth/passwords";
+import { cookies, headers } from "next/headers";
+import { isAdminFromRequest } from "@/lib/adminSession";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 import { sendWeeklyDigest } from "@/lib/email/brevo";
 
 export async function POST(req) {
-  const body = await req.json().catch(() => ({}));
-  const password = String(body?.password || "");
-
-  if (!verifySuperAdminPassword(password)) {
+  const cookieStore = await cookies();
+  const headerStore = await headers();
+  if (!isAdminFromRequest(cookieStore, headerStore)) {
     return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
