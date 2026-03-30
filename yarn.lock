@@ -407,6 +407,11 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.10.tgz"
   integrity sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==
 
+"@getbrevo/brevo@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.npmjs.org/@getbrevo/brevo/-/brevo-5.0.3.tgz"
+  integrity sha512-AIAFXiUkk5fpl8cVttGWZfxt84PFPS7DnB0+fRqd70kFsbwPvNfdYhrnD0tXL5jLmGrSeLv2pfACkzFD7gYeeA==
+
 "@google-cloud/documentai@^9.5.0":
   version "9.5.0"
   resolved "https://registry.npmjs.org/@google-cloud/documentai/-/documentai-9.5.0.tgz"

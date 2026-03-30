@@ -62,6 +62,31 @@ export default function AdminLeadsPage() {
   const [error, setError] = useState("");
   const [sourceFilter, setSourceFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("All Time");
+  const [digestLoading, setDigestLoading] = useState(false);
+  const [digestMsg, setDigestMsg] = useState("");
+
+  async function handleSendDigest() {
+    if (digestLoading) return;
+    setDigestLoading(true);
+    setDigestMsg("");
+    try {
+      const res = await fetch("/api/admin/send-digest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && json.success) {
+        setDigestMsg(`✅ Digest sent to ${json.sent} subscriber${json.sent !== 1 ? "s" : ""} (${json.articles} articles)`);
+      } else {
+        setDigestMsg(`❌ Failed: ${json.error || res.statusText}`);
+      }
+    } catch (e) {
+      setDigestMsg(`❌ Failed: ${e.message || "Network error"}`);
+    } finally {
+      setDigestLoading(false);
+    }
+  }
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -292,6 +317,32 @@ export default function AdminLeadsPage() {
         >
           Leads
         </h1>
+
+        {/* Weekly Digest Trigger */}
+        <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={handleSendDigest}
+            disabled={digestLoading}
+            style={{
+              padding: "10px 20px",
+              background: digestLoading ? "rgba(201,169,110,0.3)" : "rgba(201,169,110,0.15)",
+              border: "1px solid rgba(201,169,110,0.4)",
+              color: "#c9a96e",
+              fontSize: 13,
+              fontWeight: 600,
+              letterSpacing: "0.05em",
+              cursor: digestLoading ? "wait" : "pointer",
+            }}
+          >
+            {digestLoading ? "Sending…" : "📧 Send Weekly Digest Now"}
+          </button>
+          {digestMsg && (
+            <span style={{ fontSize: 13, color: digestMsg.startsWith("✅") ? "#9ae6b4" : "#f87171" }}>
+              {digestMsg}
+            </span>
+          )}
+        </div>
 
         {error && <p style={{ color: "#f87171", fontSize: 13, marginBottom: 12 }}>{error}</p>}
         {loading && <p style={{ color: "rgba(235,242,255,0.6)", fontSize: 14 }}>Loading…</p>}
