@@ -60,6 +60,7 @@ export function LiveIntelligenceAdmin() {
   const [editingId, setEditingId] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [breakingStatus, setBreakingStatus] = useState(null);
+  const [backfilling, setBackfilling] = useState(false);
   
   // Form state
   const [form, setForm] = useState({
@@ -214,6 +215,27 @@ export function LiveIntelligenceAdmin() {
     setShowPreview(false);
   };
 
+  // Backfill missing images via Unsplash
+  const handleBackfillImages = async () => {
+    if (!confirm('Auto-fill images for all headlines missing one?')) return;
+    setBackfilling(true);
+    try {
+      const { r, j } = await fetchAdminJSON('/api/admin/live-intelligence/backfill-images', {
+        method: 'POST',
+      });
+      if (r.ok && j) {
+        alert(`Done! Updated ${j.updated} of ${j.total} headlines.`);
+        await loadHeadlines();
+      } else {
+        alert(j?.error || 'Backfill failed');
+      }
+    } catch (err) {
+      alert('Error: ' + err.message);
+    } finally {
+      setBackfilling(false);
+    }
+  };
+
   // Reset form
   const resetForm = () => {
     setForm({
@@ -258,6 +280,9 @@ export function LiveIntelligenceAdmin() {
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="sa-miniBtn" onClick={loadHeadlines} disabled={loading}>
             {loading ? '...' : 'Refresh'}
+          </button>
+          <button className="sa-miniBtn" onClick={handleBackfillImages} disabled={backfilling}>
+            {backfilling ? '⏳ Filling...' : '🖼️ Auto-fill images'}
           </button>
           <button 
             className="sa-btn sa-btnGold" 

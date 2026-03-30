@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { normalizeCategoryToSpec } from '@/lib/live-intelligence/headlines';
+import { getHeadlineImage } from '@/lib/images/unsplash';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -168,6 +169,16 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Headline is required' }, { status: 400 });
     }
     
+    // Auto-fetch image if none provided
+    let imageUrl = body.imageUrl || body.image_url || null;
+    if (!imageUrl) {
+      try {
+        imageUrl = await getHeadlineImage(body.headline, body.category || 'market');
+      } catch (e) {
+        console.error('[live-intelligence] auto-image failed:', e.message);
+      }
+    }
+    
     const supabase = getSupabase();
     
     const { data, error } = await supabase
@@ -179,7 +190,7 @@ export async function POST(request) {
         why_it_matters: body.whyItMatters || body.why_it_matters || '',
         data_point: body.dataPoint || body.data_point || '',
         source: body.source || 'Admin',
-        image_url: body.imageUrl || body.image_url || null,
+        image_url: imageUrl,
         cta_button: body.cta_button || { text: 'Learn More', link: '/contact', icon: '→' },
         valid_from: toIsoOrNull(body.validFrom) || new Date().toISOString(),
         valid_until: toIsoOrNull(body.validUntil),
@@ -228,6 +239,16 @@ export async function PUT(request) {
       .single();
     
     if (adminCheck) {
+      // Auto-fetch image if none provided and headline changed
+      let imageUrl = body.imageUrl || body.image_url || null;
+      if (!imageUrl && body.headline) {
+        try {
+          imageUrl = await getHeadlineImage(body.headline, body.category || 'market');
+        } catch (e) {
+          console.error('[live-intelligence] auto-image failed:', e.message);
+        }
+      }
+      
       // Update admin headline
       const { data, error } = await supabase
         .from('live_intelligence_headlines')
@@ -238,7 +259,7 @@ export async function PUT(request) {
           why_it_matters: body.whyItMatters || body.why_it_matters,
           data_point: body.dataPoint || body.data_point,
           source: body.source,
-          image_url: body.imageUrl || body.image_url || null,
+          image_url: imageUrl,
           cta_button: body.cta_button,
           valid_from: toIsoOrNull(body.validFrom) || undefined,
           valid_until: toIsoOrNull(body.validUntil),
