@@ -69,6 +69,7 @@ export function LiveIntelligenceAdmin() {
     whyItMatters: '',
     dataPoint: '',
     source: '',
+    imageUrl: '',
     validFrom: '',
     validUntil: '',
     pinned: false,
@@ -203,6 +204,7 @@ export function LiveIntelligenceAdmin() {
       whyItMatters: headline.why_it_matters || headline.block_why_it_matters || '',
       dataPoint: headline.data_point || headline.block_where_fits || '',
       source: headline.source || headline.source_name || '',
+      imageUrl: headline.image_url || '',
       validFrom: headline.valid_from ? headline.valid_from.slice(0, 16) : '',
       validUntil: headline.valid_until ? headline.valid_until.slice(0, 16) : '',
       pinned: Boolean(headline.pinned),
@@ -221,6 +223,7 @@ export function LiveIntelligenceAdmin() {
       whyItMatters: '',
       dataPoint: '',
       source: '',
+      imageUrl: '',
       validFrom: '',
       validUntil: '',
       pinned: false,
@@ -343,6 +346,16 @@ export function LiveIntelligenceAdmin() {
                   value={form.source}
                   onChange={(e) => setForm(f => ({ ...f, source: e.target.value }))}
                   placeholder="News source..."
+                />
+              </div>
+
+              <div className="li-form-row">
+                <label>Image URL (optional)</label>
+                <input
+                  type="url"
+                  value={form.imageUrl}
+                  onChange={(e) => setForm(f => ({ ...f, imageUrl: e.target.value }))}
+                  placeholder="https://example.com/image.jpg"
                 />
               </div>
             </div>
