@@ -41,6 +41,26 @@ export function LeadsList({ summary }) {
   const [leads, setLeads] = useState(initialLeads);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [digestLoading, setDigestLoading] = useState(false);
+  const [digestMsg, setDigestMsg] = useState('');
+
+  async function handleSendDigest() {
+    if (digestLoading) return;
+    setDigestLoading(true);
+    setDigestMsg('');
+    try {
+      const { r, j } = await fetchAdminJSON('/api/admin/send-digest', { method: 'POST' });
+      if (r.ok && j?.success) {
+        setDigestMsg(`✅ Digest sent to ${j.sent} subscriber${j.sent !== 1 ? 's' : ''} (${j.articles} articles)`);
+      } else {
+        setDigestMsg(`❌ Failed: ${j?.error || `HTTP ${r.status}`}`);
+      }
+    } catch (e) {
+      setDigestMsg(`❌ Failed: ${e?.message || 'Network error'}`);
+    } finally {
+      setDigestLoading(false);
+    }
+  }
 
   useEffect(() => {
     setLeads(initialLeads);
@@ -100,6 +120,23 @@ export function LeadsList({ summary }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <h2 style={{ color: 'var(--lux-accent)', fontSize: 18, margin: 0 }}>Leads</h2>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            onClick={handleSendDigest}
+            disabled={digestLoading}
+            style={{
+              padding: '8px 16px',
+              background: digestLoading ? 'rgba(201,169,110,0.2)' : 'rgba(201,169,110,0.12)',
+              border: '1px solid rgba(201,169,110,0.35)',
+              borderRadius: 10,
+              color: '#c9a96e',
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: digestLoading ? 'wait' : 'pointer',
+            }}
+          >
+            {digestLoading ? 'Sending…' : '📧 Send Weekly Digest Now'}
+          </button>
           <select value={sourceFilter} onChange={(e) => setSourceFilter(e.target.value)} style={selectStyle} aria-label="Source filter">
             {SOURCE_OPTIONS.map((s) => (
               <option key={s} value={s} style={optionStyle}>{s}</option>
@@ -115,6 +152,13 @@ export function LeadsList({ summary }) {
           </select>
         </div>
       </div>
+
+      {/* Digest status */}
+      {digestMsg && (
+        <div style={{ marginTop: 8, fontSize: 13, color: digestMsg.startsWith('✅') ? '#9ae6b4' : '#f87171' }}>
+          {digestMsg}
+        </div>
+      )}
 
       {/* Lead count */}
       {!loading && leads.length > 0 && (

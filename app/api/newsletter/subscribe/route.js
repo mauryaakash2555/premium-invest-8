@@ -4,7 +4,7 @@ import { sendNewsletterWelcome } from "@/lib/email/brevo";
 
 export async function POST(request) {
   try {
-    const { email } = await request.json();
+    const { email, source } = await request.json();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json(
@@ -14,6 +14,8 @@ export async function POST(request) {
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
+    const allowedSources = ["footer-newsletter", "blog-newsletter"];
+    const cleanSource = allowedSources.includes(source) ? source : "footer-newsletter";
     const sb = supabaseAdmin();
 
     const { error } = await sb.from("leads").insert({
@@ -21,7 +23,7 @@ export async function POST(request) {
       email: cleanEmail,
       phone: null,
       interest: "Newsletter",
-      source: "footer-newsletter",
+      source: cleanSource,
       status: "new",
     });
 
