@@ -38,6 +38,19 @@ export async function POST(req) {
       }
     }
 
+    // Final fallback: fetch latest 10 regardless of date
+    if (!articles || articles.length === 0) {
+      const { data: latest } = await sb
+        .from("live_intelligence_headlines")
+        .select("id, headline, why_it_matters, category, cta_button, created_at, urgency, image_url")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (latest && latest.length > 0) {
+        articles = latest;
+      }
+    }
+
     if (!articles || articles.length === 0) {
       return NextResponse.json({ success: true, sent: 0, articles: 0, note: "No articles found" });
     }
@@ -54,7 +67,7 @@ export async function POST(req) {
     const { data: subscribers } = await sb
       .from("leads")
       .select("email")
-      .or("source.ilike.%newsletter%,interest.eq.Newsletter")
+      .or("source.ilike.%newsletter%,interest.ilike.newsletter")
       .neq("email", "")
       .not("email", "is", null);
 

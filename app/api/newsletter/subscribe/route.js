@@ -4,7 +4,7 @@ import { sendNewsletterWelcome } from "@/lib/email/brevo";
 
 export async function POST(request) {
   try {
-    const { email, source } = await request.json();
+    const { email, source, name } = await request.json();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json(
@@ -14,12 +14,13 @@ export async function POST(request) {
     }
 
     const cleanEmail = String(email).trim().toLowerCase();
+    const cleanName = String(name || "").trim() || "Newsletter Subscriber";
     const allowedSources = ["footer-newsletter", "blog-newsletter"];
     const cleanSource = allowedSources.includes(source) ? source : "footer-newsletter";
     const sb = supabaseAdmin();
 
     const { error } = await sb.from("leads").insert({
-      name: "Newsletter Subscriber",
+      name: cleanName,
       email: cleanEmail,
       phone: null,
       interest: "Newsletter",
@@ -39,7 +40,7 @@ export async function POST(request) {
 
     // Best-effort: send welcome email via Brevo
     try {
-      await sendNewsletterWelcome({ email: cleanEmail });
+      await sendNewsletterWelcome({ email: cleanEmail, name: cleanName !== "Newsletter Subscriber" ? cleanName : undefined });
     } catch (emailErr) {
       console.error("[newsletter/subscribe] Welcome email failed:", emailErr?.message);
     }
