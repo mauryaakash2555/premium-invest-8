@@ -208,7 +208,7 @@ export async function GET(req) {
     unifiedLeads = [...leadRows, ...onboardingRows].sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
   } catch (e) {
     const msg = String(e?.message || "failed");
-    const status = msg === "timeout" ? 504 : 502;
+    const status = msg === "timeout" ? 504 : 500;
     return NextResponse.json({ ok: false, error: msg }, { status });
   }
 
