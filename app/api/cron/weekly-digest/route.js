@@ -18,7 +18,7 @@ export async function GET(req) {
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
     let { data: articles } = await sb
       .from("live_intelligence_headlines")
-      .select("headline, why_it_matters, category, source, cta_button, created_at")
+      .select("id, headline, why_it_matters, category, cta_button, created_at, urgency, image_url")
       .eq("is_active", true)
       .gte("created_at", sevenDaysAgo)
       .order("created_at", { ascending: false })
@@ -29,7 +29,7 @@ export async function GET(req) {
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
       const { data: extended } = await sb
         .from("live_intelligence_headlines")
-        .select("headline, why_it_matters, category, source, cta_button, created_at")
+        .select("id, headline, why_it_matters, category, cta_button, created_at, urgency, image_url")
         .eq("is_active", true)
         .gte("created_at", thirtyDaysAgo)
         .order("created_at", { ascending: false })
@@ -50,7 +50,7 @@ export async function GET(req) {
       summary: a.why_it_matters,
       category: a.category,
       source_url: a.cta_button?.link || null,
-      image_url: null,
+      image_url: a.image_url || null,
     }));
 
     // 2. Fetch newsletter subscribers
